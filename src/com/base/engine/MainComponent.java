@@ -77,10 +77,11 @@ public class MainComponent {
                 if(Window.isCloseRequested())
                     stop(); 
                 
-                Time.setDelta(frameTime);
-                Input.update();
+                Time.setDelta(frameTime);                
             
                 game.input();
+                Input.update();
+                
                 game.update();
                 
                 if(frameCounter >= Time.SECOND)
