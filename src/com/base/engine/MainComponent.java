@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 /**
  *
  * @author kmne68
+ * 
+ * Use this link for library setup: http://wiki.lwjgl.org/wiki/Setting_Up_LWJGL_with_NetBeans.html
  */
 public class MainComponent {
     
