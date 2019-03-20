@@ -64,11 +64,13 @@ public class Game {
         
         temp += Time.getDelta();
         
+        float tempSin = (float)Math.sin(temp);
         // tempAmount = (float)Math.sin(temp);
         // shader.setUniformf("uniformFloat", (float)Math.abs(Math.sin(temp)));
         
-        // transform.setTranslation((float)Math.sin(temp), 0, 0);
-        transform.setRotation(0, 0, (float)Math.sin(temp) * 180);
+        transform.setTranslation((float)Math.sin(temp), 0, 0);
+        transform.setRotation(0, 0, (float)Math.sin(temp) * 180);        
+        transform.setScale(tempSin, tempSin, tempSin);
     }
 
     public void render() {
