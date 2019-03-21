@@ -22,12 +22,16 @@ public class Game {
         mesh = new Mesh();
         shader = new Shader();
         
-        Vertex[] data = new Vertex[] {new Vertex(new Vector3f(-1, -1, 0)),
+        Vertex[] vertices = new Vertex[] {new Vertex(new Vector3f(-1, -1, 0)),
                                       new Vertex(new Vector3f(0, 1, 0)),            
-                                      new Vertex(new Vector3f(1, -1, 0))};
-                        
+                                      new Vertex(new Vector3f(1, -1, 0)),
+                                      new Vertex(new Vector3f(0, -1, 1))};
+        int[] indices = new int[] {0, 1, 3,
+                                    3, 1, 2,
+                                    2, 1, 0,
+                                    0, 2, 3};
 
-        mesh.addVertices(data);
+        mesh.addVertices(vertices, indices);
         
         transform = new Transform();
         
@@ -69,8 +73,8 @@ public class Game {
         // shader.setUniformf("uniformFloat", (float)Math.abs(Math.sin(temp)));
         
         transform.setTranslation((float)Math.sin(temp), 0, 0);
-        transform.setRotation(0, 0, (float)Math.sin(temp) * 180);        
-        transform.setScale(tempSin, tempSin, tempSin);
+        transform.setRotation(0, tempSin * 180, 0);        
+       // transform.setScale(tempSin, tempSin, tempSin);
     }
 
     public void render() {
