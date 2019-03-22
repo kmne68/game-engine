@@ -19,10 +19,11 @@ public class Game {
 
     public Game() {
         
-        mesh = new Mesh();
+    //    mesh = new Mesh();
+        mesh = ResourceLoader.loadMesh("cube.obj");
         shader = new Shader();
         
-        Vertex[] vertices = new Vertex[] {new Vertex(new Vector3f(-1, -1, 0)),
+/*        Vertex[] vertices = new Vertex[] {new Vertex(new Vector3f(-1, -1, 0)),
                                       new Vertex(new Vector3f(0, 1, 0)),            
                                       new Vertex(new Vector3f(1, -1, 0)),
                                       new Vertex(new Vector3f(0, -1, 1))};
@@ -32,7 +33,7 @@ public class Game {
                                     0, 2, 3};
 
         mesh.addVertices(vertices, indices);
-        
+*/        
         transform = new Transform();
         
         shader.addVertexShader(ResourceLoader.loadShader("basicVertex.vs"));
@@ -74,7 +75,7 @@ public class Game {
         
         transform.setTranslation((float)Math.sin(temp), 0, 0);
         transform.setRotation(0, tempSin * 180, 0);        
-       // transform.setScale(tempSin, tempSin, tempSin);
+        transform.setScale(0.5f * tempSin, 0.5f * tempSin, 0.5f * tempSin);
     }
 
     public void render() {
