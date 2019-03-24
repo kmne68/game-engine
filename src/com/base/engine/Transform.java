@@ -11,6 +11,12 @@ package com.base.engine;
  */
 public class Transform {
     
+    private static float zNear; // how close an object can be before it gets clipped
+    private static float zFar;  // how far an object can be before it gets clipped
+    private static float screenWidth;
+    private static float screenHeight;
+    private static float fieldOfView;   // for perspective projection
+    
     private Vector3f translation;
     private Vector3f rotation;
     private Vector3f scale;
@@ -36,9 +42,29 @@ public class Transform {
         return translationMatrix.multiplyMatrix(rotationMatrix.multiplyMatrix(scaleMatrix));
     }
     
+    
+    public Matrix4f getProjectedTransformation()
+    {
+        Matrix4f transformationMatrix = getTransformation();
+        Matrix4f projectionMatrix = new Matrix4f().initProjection(fieldOfView, zNear, zNear, zNear, zFar);
+        
+        return projectionMatrix.multiplyMatrix(transformationMatrix);
+    }
+    
 
     public Vector3f getTranslation() {
         return translation;
+    }
+    
+    
+    public static void setProjection(float fov, float width, float height, float zNear, float zFar)
+    {
+        Transform.fieldOfView = fov;
+        Transform.screenWidth = width;
+        Transform.screenHeight = height;
+        Transform.zNear = zNear;
+        Transform.zFar = zFar;
+        
     }
     
 

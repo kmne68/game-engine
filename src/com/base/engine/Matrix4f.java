@@ -41,6 +41,49 @@ public class Matrix4f {
         return this;
     }   
     
+    /**
+     * 
+     * @param fov       // field of view
+     * @param width     // screen width
+     * @param height    // screen height
+     * @param zNear     // near limit on Z axis
+     * @param zFar      // far limit on Z axis
+     * @return 
+     */
+    public Matrix4f initProjection(float fov, float width, float height, float zNear, float zFar)
+    {
+        float aspectRatio = width / height; // used because screen height and width aren't equal 
+        float tanHalfMathFOV = (float) Math.tan((Math.toRadians(fov / 2)));
+        float zRange = zNear - zFar;
+        
+        // Divide by each point's distance to center i.e. tanHalfMathFOV
+        // x values
+        m[0][0] = 1.0f / tanHalfMathFOV * aspectRatio;
+        m[0][1] = 0;    
+        m[0][2] = 0;    
+        m[0][3] = 0;
+        
+        // y values
+        m[1][0] = 0;    
+        m[1][1] = 1 / tanHalfMathFOV;    
+        m[1][2] = 0;    
+        m[1][3] = 0;
+        
+        // z values
+        m[2][0] = 0;    
+        m[2][1] = 0;    
+        m[2][2] = (-zNear - zFar)/zRange;    
+        m[2][3] = 2 * zFar * zNear / zRange;
+        
+        // w values
+        m[3][0] = 0;    
+        m[3][1] = 0;    
+        m[3][2] = 1;    // z overrides w and OpenGL will divide it out later
+        m[3][3] = 0;     
+        
+        return this;
+    }
+    
     
     /**
      * Rotate in each two-dimensional plane then multiply the products to get
