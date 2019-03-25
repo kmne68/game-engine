@@ -29,8 +29,10 @@ public class Vector3f {
     }
     
     
-    public Vector3f rotate()
+    public Vector3f rotate(float angle, Vector3f axis)
     {
+        
+        
         return null;
     }
     
@@ -113,19 +115,7 @@ public class Vector3f {
     public String toString()
     {
         return "(" + x + ", " + y + ")";
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    } 
     
 
     public float getX() {
