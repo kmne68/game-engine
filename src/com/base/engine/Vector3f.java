@@ -29,11 +29,33 @@ public class Vector3f {
     }
     
     
+    /**
+     * Convert axis of rotation into a quaternion
+     * 
+     * @param angle
+     * @param axis
+     * @return 
+     */
     public Vector3f rotate(float angle, Vector3f axis)
     {
+        float sinHalfAngle = (float) Math.sin(Math.toRadians(angle / 2));
+        float cosHalfAngle = (float) Math.cos(Math.toRadians(angle / 2));
         
+        float rX = axis.getX() * sinHalfAngle;
+        float rY = axis.getY() * sinHalfAngle;
+        float rZ = axis.getZ() * sinHalfAngle;
+        float rW = 1 * cosHalfAngle;
         
-        return null;
+        Quaternion rotation = new Quaternion(rX, rY, rZ, rW);
+        Quaternion conjugate = rotation.conjugate();
+        
+        Quaternion w = rotation.multiplyVector(this).multiplyQuaternion(conjugate);
+        
+        x = w.getX();
+        y = w.getY();
+        z = w.getZ();
+        
+        return this;
     }
     
     

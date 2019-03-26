@@ -16,6 +16,15 @@ public class Transform {
     private static float screenWidth;
     private static float screenHeight;
     private static float fieldOfView;   // for perspective projection
+    private static Camera camera;
+
+    public static Camera getCamera() {
+        return camera;
+    }
+
+    public static void setCamera(Camera aCamera) {
+        camera = aCamera;
+    }
     
     private Vector3f translation;
     private Vector3f rotation;
