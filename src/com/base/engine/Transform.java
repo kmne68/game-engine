@@ -56,8 +56,11 @@ public class Transform {
     {
         Matrix4f transformationMatrix = getTransformation();
         Matrix4f projectionMatrix = new Matrix4f().initProjection(fieldOfView, zNear, zNear, zNear, zFar);
+        Matrix4f cameraRotation = new Matrix4f().initCamera(camera.getForward(), camera.getUp());
+        Matrix4f cameraTranslation = new Matrix4f().initTranslation(
+                                        -camera.getPosition().getX(), -camera.getPosition().getY(), -camera.getPosition().getZ());
         
-        return projectionMatrix.multiplyMatrix(transformationMatrix);
+        return projectionMatrix.multiplyMatrix(cameraRotation.multiplyMatrix(cameraTranslation.multiplyMatrix(transformationMatrix)));
     }
     
 

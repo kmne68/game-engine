@@ -44,7 +44,7 @@ public class Camera {
      */
     public Vector3f getLeft()
     {
-        Vector3f left = up.crossProduct(forward);
+        Vector3f left = forward.crossProduct(up);
         left.normalize();
         return left;
     }
@@ -52,9 +52,34 @@ public class Camera {
     
     public Vector3f getRight()
     {
-        Vector3f right = forward.crossProduct(up);
+        Vector3f right = up.crossProduct(forward);
         right.normalize();
         return right;
+    }
+    
+    
+    public void input()
+    {
+        float moveAmount = (float)(10 * Time.getDelta());
+        float rotationAmount = (float)(100 * Time.getDelta());
+        
+        if(Input.getKey(Input.KEY_W))
+            move(getForward(), moveAmount);
+        if(Input.getKey(Input.KEY_S))
+            move(getForward(), -moveAmount);        
+        if(Input.getKey(Input.KEY_A))
+            move(getLeft(), moveAmount);        
+        if(Input.getKey(Input.KEY_D))
+            move(getRight(), moveAmount);  
+        
+        if(Input.getKey(Input.KEY_UP))
+            rotateX(-rotationAmount);
+        if(Input.getKey(Input.KEY_DOWN))
+            rotateX(rotationAmount);
+        if(Input.getKey(Input.KEY_LEFT))
+            rotateY(-rotationAmount);
+        if(Input.getKey(Input.KEY_RIGHT))
+            rotateY(rotationAmount);
     }
     
     
@@ -63,7 +88,7 @@ public class Camera {
         Vector3f horizontalAxis = yAxis.crossProduct(forward);
         horizontalAxis.normalize();    
         
-        forward.rotate(angle, yAxis);
+        forward.rotate(angle, horizontalAxis);
         forward.normalize();
         
         up = forward.crossProduct(horizontalAxis);
