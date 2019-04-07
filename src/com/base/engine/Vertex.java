@@ -11,13 +11,21 @@ package com.base.engine;
  */
 public class Vertex {
     
-    public static final int SIZE = 3;
+    public static final int SIZE = 5;
     
     private Vector3f position;
+    private Vector2f textureCoordinate;
+    
+    
+    public Vertex(Vector3f position, Vector2f textureCoordinate)
+    {
+        this.position = position;
+        this.textureCoordinate = textureCoordinate;
+    }
     
     public Vertex(Vector3f position)
     {
-        this.position = position;
+        this(position, new Vector2f(0, 0));
     }
 
     public Vector3f getPosition() {
@@ -26,6 +34,14 @@ public class Vertex {
 
     public void setPosition(Vector3f position) {
         this.position = position;
+    }
+
+    public Vector2f getTextureCoordinate() {
+        return textureCoordinate;
+    }
+
+    public void setTextureCoordinate(Vector2f textureCoordinate) {
+        this.textureCoordinate = textureCoordinate;
     }
     
     

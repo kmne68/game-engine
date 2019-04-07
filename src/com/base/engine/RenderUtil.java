@@ -32,6 +32,7 @@ public class RenderUtil {
         
         //TODO Depth clamp for later
         
+        glEnable(GL_TEXTURE_2D);
         glEnable(GL_FRAMEBUFFER_SRGB);  // Add gamma correction (exponential)
     }
     
@@ -39,6 +40,15 @@ public class RenderUtil {
     public static String getOpenGLVersion()
     {
         return glGetString(GL_VERSION);
+    }
+    
+    
+    public static void setTextures(boolean enabled)
+    {
+        if(enabled)
+            glEnable(GL_TEXTURE_2D);
+        else
+            glDisable(GL_TEXTURE_2D);        
     }
     
 }

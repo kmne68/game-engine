@@ -40,9 +40,14 @@ public class Mesh {
     public void draw()
     {
         glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
         
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0); 
+        
+        // The final parameter (12) is how many bytes into the memory location
+        // we will find the texture coordinate data
+        glVertexAttribPointer(0, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12);
         
         // Not used after as of installment #15
         // glDrawArrays(GL_TRIANGLES, 0, size);
@@ -51,5 +56,6 @@ public class Mesh {
         glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
         
         glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
     }
 }

@@ -46,7 +46,9 @@ public class BufferUtil {
         {
             buffer.put(vertices[i].getPosition().getX());
             buffer.put(vertices[i].getPosition().getY());
-            buffer.put(vertices[i].getPosition().getZ());            
+            buffer.put(vertices[i].getPosition().getZ());   
+            buffer.put(vertices[i].getTextureCoordinate().getX());
+            buffer.put(vertices[i].getTextureCoordinate().getY());
         }
         
         buffer.flip();
