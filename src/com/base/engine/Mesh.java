@@ -47,7 +47,7 @@ public class Mesh {
         
         // The final parameter (12) is how many bytes into the memory location
         // we will find the texture coordinate data
-        glVertexAttribPointer(0, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12);
         
         // Not used after as of installment #15
         // glDrawArrays(GL_TRIANGLES, 0, size);
