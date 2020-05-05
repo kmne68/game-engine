@@ -100,7 +100,14 @@ public class Vector2f {
     public Vector2f divide(float r)
     {
         return new Vector2f(x / r, y / r);
-    }    
+    }  
+    
+    
+    public Vector2f abs() {
+      
+      return new Vector2f(Math.abs(x), Math.abs(y) );
+      
+    }
     
 
     public String toString()

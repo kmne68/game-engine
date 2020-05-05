@@ -14,129 +14,106 @@ import static org.lwjgl.opengl.GL32.*;
  * @author kmne68
  */
 public class Shader {
-    
-    private int program;
-    private HashMap<String, Integer> uniforms;
-    
-    public Shader()
-    {
-        program = glCreateProgram();
-        uniforms = new HashMap<String, Integer>();
-        
-        if(program == 0)
-        {
-            System.err.println("Shader creation failed: Could not find valid memor location in constructor.");
-            System.exit(1);
-        }
+
+  private int program;
+  private HashMap<String, Integer> uniforms;
+
+  public Shader() {
+    program = glCreateProgram();
+    uniforms = new HashMap<String, Integer>();
+
+    if (program == 0) {
+      System.err.println("Shader creation failed: Could not find valid memor location in constructor.");
+      System.exit(1);
     }
-    
-    public void addVertexShader(String text)
-    {
-        addProgram(text, GL_VERTEX_SHADER);
+  }
+
+  public void addVertexShader(String text) {
+    addProgram(text, GL_VERTEX_SHADER);
+  }
+
+  public void addGeometryShader(String text) {
+    addProgram(text, GL_GEOMETRY_SHADER);
+  }
+
+  public void addFragmentShader(String text) {
+    addProgram(text, GL_FRAGMENT_SHADER);
+  }
+
+  /**
+   * Adds a uniform variable for use with shader files
+   *
+   * @param uniform
+   */
+  public void addUniform(String uniform) {
+    int uniformLocation = glGetUniformLocation(program, uniform);
+
+    if (uniformLocation == 0xFFFFFF) {
+      System.out.println("Error: could not find uniform " + uniform);
+      new Exception().printStackTrace();
+      System.exit(1);
     }
-    
-    
-    public void addGeometryShader(String text)
-    {
-        addProgram(text, GL_GEOMETRY_SHADER);
+
+    uniforms.put(uniform, uniformLocation);
+  }
+
+  public void bind() {
+    glUseProgram(program);
+  }
+
+  public void compileShader() {
+    glLinkProgram(program);
+
+    if (glGetProgram(program, GL_LINK_STATUS) == 0) {
+      System.err.println(glGetProgramInfoLog(program, 1024));
+      System.exit(1);
     }
-    
-    
-    public void addFragmentShader(String text)
-    {
-        addProgram(text, GL_FRAGMENT_SHADER);
+
+    glValidateProgram(program);
+
+    if (glGetProgram(program, GL_VALIDATE_STATUS) == 0) {
+      System.err.println(glGetProgramInfoLog(program, 1024));
+      System.exit(1);
     }
-    
-    
-    /**
-     * Adds a uniform variable for use with shader files
-     * @param uniform 
-     */
-    public void addUniform(String uniform)
-    {
-        int uniformLocation = glGetUniformLocation(program, uniform);
-        
-        if(uniformLocation == 0xFFFFFF)
-        {
-            System.out.println("Error: could not find uniform " + uniform);
-            new Exception().printStackTrace();
-            System.exit(1);
-        }
-        
-        uniforms.put(uniform, uniformLocation);
+  }
+
+  public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material) {
+
+  }
+
+  private void addProgram(String text, int type) {
+    int shader = glCreateShader(type);
+
+    if (shader == 0) {
+      System.err.println("Shader creation failed. Could not find valide memory lcation in constructor.");
+      System.exit(1);
     }
-    
-    
-    public void bind()
-    {
-        glUseProgram(program);
+
+    glShaderSource(shader, text);
+    glCompileShader(shader);
+
+    if (glGetShader(shader, GL_COMPILE_STATUS) == 0) {
+      System.err.println(glGetShaderInfoLog(shader, 1024));
+      System.exit(1);
     }
-    
-    
-    public void compileShader()
-    {
-        glLinkProgram(program);
-        
-        if(glGetProgram(program, GL_LINK_STATUS) == 0)
-        {
-            System.err.println(glGetProgramInfoLog(program, 1024));
-            System.exit(1);
-        }
-        
-        glValidateProgram(program);
-        
-        if(glGetProgram(program, GL_VALIDATE_STATUS) == 0)
-        {
-            System.err.println(glGetProgramInfoLog(program, 1024));
-            System.exit(1);
-        }
-    }
-    
-    
-    private void addProgram(String text, int type)
-    {
-        int shader = glCreateShader(type);
-        
-        if(shader == 0)
-        {
-            System.err.println("Shader creation failed. Could not find valide memory lcation in constructor.");
-            System.exit(1);
-        }
-        
-        glShaderSource(shader, text);
-        glCompileShader(shader);
-        
-        if(glGetShader(shader, GL_COMPILE_STATUS) == 0)
-        {
-            System.err.println(glGetShaderInfoLog(shader, 1024));
-            System.exit(1);
-        }
-        
-        glAttachShader(program, shader);
-    }
-    
-    
-    public void setUniformi(String uniformName, int value)
-    {
-        glUniform1i(uniforms.get(uniformName), value);
-    }
-    
-    
-    public void setUniformf(String uniformName, float value)
-    {
-        glUniform1f(uniforms.get(uniformName), value);
-    }
-    
-    
-    public void setUniform(String uniformName, Vector3f value)
-    {
-        glUniform3f(uniforms.get(uniformName), value.getX(), value.getY(), value.getZ());
-    }
-    
-    
-    public void setUniform(String uniformName, Matrix4f value)
-    {
-        glUniformMatrix4(uniforms.get(uniformName), true, BufferUtil.createFlippedBuffer(value));
-    }    
-    
+
+    glAttachShader(program, shader);
+  }
+
+  public void setUniformi(String uniformName, int value) {
+    glUniform1i(uniforms.get(uniformName), value);
+  }
+
+  public void setUniformf(String uniformName, float value) {
+    glUniform1f(uniforms.get(uniformName), value);
+  }
+
+  public void setUniform(String uniformName, Vector3f value) {
+    glUniform3f(uniforms.get(uniformName), value.getX(), value.getY(), value.getZ());
+  }
+
+  public void setUniform(String uniformName, Matrix4f value) {
+    glUniformMatrix4(uniforms.get(uniformName), true, BufferUtil.createFlippedBuffer(value));
+  }
+
 }
