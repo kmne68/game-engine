@@ -209,8 +209,7 @@ public class Input {
   public static final int KEY_POWER = 0xDE;
   public static final int KEY_SLEEP = 0xDF;
 
-  //  private static ArrayList<Integer> lastKeys = new ArrayList<Integer>();
-  //  private static ArrayList<Integer> lastMouse = new ArrayList<Integer>();
+
   public static void update() {
     
     for(int i = 0; i < NUM_KEYCODES; i++)
@@ -220,64 +219,6 @@ public class Input {
       lastMouse[i] = getMouse(i);
     }
 
-//        lastKeys.clear();
-//        
-//        for(int i = 0; i < NUM_KEYCODES; i++)
-//        {
-//            if(getKey(i))
-//                lastKeys.add(i);
-//        }
-//        
-//        lastMouse.clear();
-//        
-//        for(int i = 0; i < NUM_MOUSE_BUTTONS; i++)
-//            if(getMouse(i))
-//                lastMouse.add(i);
-//
-//        upMouse.clear();
-//        for (int i = 0; i < NUM_MOUSE_BUTTONS; i++) {
-//            if (!getMouse(i) && currentMouse.contains(i)) {
-//                upMouse.add(i);
-//            }
-//        }
-//
-//        downMouse.clear();
-//        for (int i = 0; i < NUM_MOUSE_BUTTONS; i++) {
-//            if (getMouse(i) && !currentMouse.contains(i)) {
-//                downMouse.add(i);
-//            }
-//        }
-//
-//        upKeys.clear();
-//        for (int i = 0; i < NUM_KEYCODES; i++) {
-//            if (!getKey(i) && currentKeys.contains(i)) {
-//                upKeys.add(i);
-//            }
-//        }
-//
-//        downKeys.clear();
-//
-//        for (int i = 0; i < NUM_KEYCODES; i++) {
-//            if (getKey(i) && !currentKeys.contains(i)) {
-//                downKeys.add(i);
-//            }
-//        }
-//
-//        currentKeys.clear();
-//
-//        for (int i = 0; i < NUM_KEYCODES; i++) {
-//            if (getKey(i)) {
-//                currentKeys.add(i);     // keep track of every key that's pressed in a frame
-//            }
-//        }
-//
-//        currentMouse.clear();
-//
-//        for (int i = 0; i < NUM_MOUSE_BUTTONS; i++) {
-//            if (getMouse(i)) {
-//                currentMouse.add(i);
-//            }
-//        }
   }
 
   public static boolean getKey(int keyCode) {
@@ -286,12 +227,13 @@ public class Input {
 
   // Key should only be down for on frame
   public static boolean getKeyDown(int keyCode) {
-    return downKeys.contains(keyCode);
-
+    //return downKeys.contains(keyCode);
+    return getKey(keyCode) && !lastKeys[keyCode];
   }
 
   public static boolean getKeyUp(int keyCode) {
-    return upKeys.contains(keyCode);
+    // return upKeys.contains(keyCode);
+    return !getKey(keyCode) && lastKeys[keyCode];
   }
 
   public static boolean getMouse(int mouseButton) {
@@ -299,11 +241,13 @@ public class Input {
   }
 
   public static boolean getMouseDown(int mouseButton) {
-    return downMouse.contains(mouseButton);
+    // return downMouse.contains(mouseButton);
+    return getMouse(mouseButton) && !lastMouse[mouseButton];
   }
 
   public static boolean getMouseUp(int mouseButton) {
-    return upMouse.contains(mouseButton);
+    // return upMouse.contains(mouseButton);
+    return !getMouse(mouseButton) && lastMouse[mouseButton];
   }
 
   public static Vector2f getMousePosition() {

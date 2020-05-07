@@ -1,16 +1,17 @@
 #version 330
 
-// in vec4 color; // removed in video 21
 in vec2 textureCoordinate0;
 
+uniform vec3 color;
 uniform sampler2D sampler;
-
-// out vec4 fragColor; // removed sometime before video 21
-
 
 void main()
 {
-    // fragColor = color;  // changed to gl_FragColor = color sometime before video 21
+    vec4 textureColor = texture2D(sampler, textureCoordinate0.xy);
 
-    gl_FragColor = texture2D(sampler, textureCoordinate0.xy);
+        if(textureColor == 0)
+            gl_FragColor = vec4(color, 1);
+        else
+            gl_FragColor = textureColor * vec4(color, 1);
+
 }

@@ -16,43 +16,36 @@ public class Game {
   private Material material;
   private Mesh mesh;
   private Shader shader;
-  private Texture texture;
   private Transform transform;
   private Camera camera;
 
   public Game() {
 
     mesh = ResourceLoader.loadMesh("cube.obj");
-    material = new Material(ResourceLoader.loadTexture("test.png"), new Vector3f(0, 1, 1));
+    // material = new Material( null, new Vector3f( 0, 1, 1 ) );
+    material = new Material( ResourceLoader.loadTexture( "test.png"), new Vector3f( 0, 1, 1 ) );
     shader = BasicShader.getInstance();
     camera = new Camera();
 
-    Vertex[] vertices = new Vertex[]{new Vertex(new Vector3f(-1, -1, 0),
-      new Vector2f(0, 0)),
-      new Vertex(new Vector3f(0, 1, 0),
-      new Vector2f(0.5f, 0)),
-      new Vertex(new Vector3f(1, -1, 0),
-      new Vector2f(1.0f, 0)),
-      new Vertex(new Vector3f(0, -1, 1),
-      new Vector2f(0.0f, 0.5f))};
-    int[] indices = new int[]{3, 1, 0,
-      2, 1, 3,
-      0, 1, 2,
-      0, 2, 3};
+//    Vertex[] vertices = new Vertex[]{new Vertex(new Vector3f(-1, -1, 0),
+//      new Vector2f(0, 0)),
+//      new Vertex(new Vector3f(0, 1, 0),
+//      new Vector2f(0.5f, 0)),
+//      new Vertex(new Vector3f(1, -1, 0),
+//      new Vector2f(1.0f, 0)),
+//      new Vertex(new Vector3f(0, -1, 1),
+//      new Vector2f(0.0f, 0.5f))};
+//    int[] indices = new int[]{3, 1, 0,
+//      2, 1, 3,
+//      0, 1, 2,
+//      0, 2, 3};
 
-    mesh.addVertices(vertices, indices);
-
-    transform = new Transform();
-    transform.setProjection(70f, Window.getWidth(), Window.getHeight(), 0.1f, 1000f);
-
+//    mesh.addVertices(vertices, indices);
+    
+    Transform.setProjection(70f, Window.getWidth(), Window.getHeight(), 0.1f, 1000);
     Transform.setCamera(camera);
+    transform = new Transform();
 
-//    shader.addVertexShader(ResourceLoader.loadShader("basicVertex.vs"));
-//    shader.addFragmentShader(ResourceLoader.loadShader("basicFragment.fs"));
-//    shader.compileShader();
-
-    // shader.addUniform("uniformFloat");
-//    shader.addUniform("transform");
   }
 
   public void input() {
@@ -83,17 +76,15 @@ public class Game {
     temp += Time.getDelta();
 
     float tempSin = (float) Math.sin(temp);
-        // tempAmount = (float)Math.sin(temp);
-    // shader.setUniformf("uniformFloat", (float)Math.abs(Math.sin(temp)));
 
-    transform.setTranslation((float) Math.sin(temp), 0, 5);
+    transform.setTranslation(tempSin, 0, 5);
     transform.setRotation(0, tempSin * 180, 0);
     // transform.setScale(0.5f * tempSin, 0.5f * tempSin, 0.5f * tempSin);
   }
 
   public void render() {
 
-    RenderUtil.setClearColor(Transform.getCamera().getPosition().divide(2048f).abs());
+    RenderUtil.setClearColor(Transform.getCamera().getPosition().divide(2048f).absolute());
     shader.bind();
     shader.updateUniforms(transform.getTransformation(), transform.getProjectedTransformation(), material);
     mesh.draw();

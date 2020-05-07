@@ -59,14 +59,10 @@ public class Vector3f {
   }
 
   public Vector3f normalize() {
+    
     float length = length();
 
-//    x /= length;
-//    y /= length;
-//    z /= length;
-//
-//    return this;
-    return new Vector3f(x / length, y / length, z / length);
+    return new Vector3f( x / length, y / length, z / length );
   }
 
   public Vector3f crossProduct(Vector3f r) {
@@ -109,7 +105,7 @@ public class Vector3f {
     return new Vector3f(x / r, y / r, z / r);
   }
 
-  public Vector3f abs() {
+  public Vector3f absolute() {
     return new Vector3f(Math.abs(x), Math.abs(y), Math.abs(z));
   }
 

@@ -39,10 +39,7 @@ public class Vector2f {
     {
         float length = length();
         
-        x /= length;
-        y /= length;
-        
-        return this;
+        return new Vector2f( x / length, y / length );
     }
     
     
@@ -103,7 +100,7 @@ public class Vector2f {
     }  
     
     
-    public Vector2f abs() {
+    public Vector2f absolute() {
       
       return new Vector2f(Math.abs(x), Math.abs(y) );
       
