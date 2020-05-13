@@ -159,7 +159,7 @@ public class Matrix4f {
     {
         Matrix4f result = new Matrix4f();
         
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 4; j++)
             {
                 result.set(i, j, m[i][0] * r.get(0, j) +
@@ -167,7 +167,7 @@ public class Matrix4f {
                         m[i][2] * r.get(2, j) +
                         m[i][3] * r.get(3, j));
             }
-        
+        }
         return result;
     }
 
@@ -186,13 +186,13 @@ public class Matrix4f {
 
     public float[][] getM() {
       
-      float[][] res = new float[4][4];
+      float[][] result = new float[4][4];
       
       for(int i = 0; i < 4; i++)
         for(int j = 0; j < 4; j++)
-          res[i][j] = m[i][j];
+          result[i][j] = m[i][j];
       
-        return res;
+        return result;
     }
    
     

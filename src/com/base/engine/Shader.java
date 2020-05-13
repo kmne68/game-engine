@@ -19,6 +19,9 @@ public class Shader {
   private HashMap<String, Integer> uniforms;
 
   public Shader() {
+    
+    System.out.println("*** Shader() ***");
+    
     program = glCreateProgram();
     uniforms = new HashMap<String, Integer>();
 
@@ -29,14 +32,17 @@ public class Shader {
   }
 
   public void addVertexShader(String text) {
+    System.out.println("*** Shader().addVertexShader() ***");
     addProgram(text, GL_VERTEX_SHADER);
   }
 
   public void addGeometryShader(String text) {
+    System.out.println("*** Shader().addGeometryShader() ***");
     addProgram(text, GL_GEOMETRY_SHADER);
   }
 
   public void addFragmentShader(String text) {
+    System.out.println("*** Shader().addFragmentShader() ***");
     addProgram(text, GL_FRAGMENT_SHADER);
   }
 
@@ -46,6 +52,7 @@ public class Shader {
    * @param uniform
    */
   public void addUniform(String uniform) {
+    System.out.println("*** Shader().addUniform() ***");
     int uniformLocation = glGetUniformLocation(program, uniform);
 
     if (uniformLocation == 0xFFFFFF) {
@@ -58,42 +65,54 @@ public class Shader {
   }
 
   public void bind() {
+    System.out.println("*** Shader().bind() ***");
     glUseProgram(program);
   }
 
   public void compileShader() {
+    System.out.println("*** Shader().compileShader() ***");
     glLinkProgram(program);
 
-    if (glGetProgram(program, GL_LINK_STATUS) == 0) {
+    if (glGetProgrami(program, GL_LINK_STATUS) == 0) {
       System.err.println(glGetProgramInfoLog(program, 1024));
       System.exit(1);
     }
 
     glValidateProgram(program);
 
-    if (glGetProgram(program, GL_VALIDATE_STATUS) == 0) {
+    if (glGetProgrami(program, GL_VALIDATE_STATUS) == 0) {
       System.err.println(glGetProgramInfoLog(program, 1024));
       System.exit(1);
     }
   }
 
   public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material) {
-
+    System.out.println("*** Shader().updateUniforms() ***");
   }
 
   private void addProgram(String text, int type) {
+    System.out.println("*** Shader().addProgram() ***");
+    
     int shader = glCreateShader(type);
-
+    
+    System.out.println("*** shader = " + shader + " ***");
     if (shader == 0) {
-      System.err.println("Shader creation failed. Could not find valide memory lcation in constructor.");
+      System.err.println("Shader creation failed. Could not find valid memory location in constructor.");
       System.exit(1);
     }
-
+    System.out.println("*** shader.addProgram() after if() ***");
     glShaderSource(shader, text);
+    System.out.println("*** shader.addProgram() after glShaderSource() ***");
+    
     glCompileShader(shader);
-
-    if (glGetShader(shader, GL_COMPILE_STATUS) == 0) {
+    System.out.println("*** shader.addProgram() after glCompileShader() ***");
+    System.out.println("*** " + GL_COMPILE_STATUS + " ***");
+    System.out.println("*** glGetShader(shader, GL_COMPILE_STATUS = " + glGetShaderi(shader, GL_COMPILE_STATUS) + " ***");
+    
+    if (glGetShaderi(shader, GL_COMPILE_STATUS) == 0) {
+      System.out.println("*** inside if(glGetShaderi()... ***");
       System.err.println(glGetShaderInfoLog(shader, 1024));
+      System.out.println("*** inside if(glGetShaderi() after error message... ***");
       System.exit(1);
     }
 

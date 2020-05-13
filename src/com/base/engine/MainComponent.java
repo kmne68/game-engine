@@ -33,6 +33,7 @@ public class MainComponent {
         RenderUtil.initGraphics();
         isRunning = false;
         game = new Game();
+        System.out.println("MainComponent");
     }
     
     

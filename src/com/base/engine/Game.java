@@ -24,6 +24,8 @@ public class Game {
     mesh = ResourceLoader.loadMesh("cube.obj");
     // material = new Material( null, new Vector3f( 0, 1, 1 ) );
     material = new Material( ResourceLoader.loadTexture( "test.png"), new Vector3f( 0, 1, 1 ) );
+    System.out.println("*** Game() ***");
+    // shader = new Shader();
     shader = BasicShader.getInstance();
     camera = new Camera();
 

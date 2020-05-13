@@ -26,6 +26,7 @@ public class Camera {
     public Camera()
     {
         this(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), new Vector3f(0, 1, 0));
+        System.out.println("*** Camera() ***");
     }
     
 
@@ -105,7 +106,7 @@ public class Camera {
             rotateX(-deltaPosition.getY() * sensitivity);
           
           if(rotateY || rotateX)
-            Input.setMousePosition(new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2 ) );
+            Input.setMousePosition( new Vector2f( Window.getWidth() / 2, Window.getHeight() / 2 ) );
         }
         
     }    

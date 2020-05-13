@@ -46,11 +46,7 @@ public class Vector3f {
 
     Quaternion w = rotation.multiplyVector(this).multiplyQuaternion(conjugate);
 
-    x = w.getX();
-    y = w.getY();
-    z = w.getZ();
-
-    return this;
+    return new Vector3f( w.getX(), w.getY(), w.getZ() );
   }
 
   // The dot product of this vector and another

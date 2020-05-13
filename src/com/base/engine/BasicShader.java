@@ -14,7 +14,7 @@ public class BasicShader extends Shader {
   private static final BasicShader instance = new BasicShader();
 
   public static BasicShader getInstance() {
-
+    
     return instance;
 
   }
@@ -22,9 +22,13 @@ public class BasicShader extends Shader {
   private BasicShader() {
 
     super();
-
+    System.out.println("*** BasicShader() after super() ***");
+    
     addVertexShader(ResourceLoader.loadShader("basicVertex.vs"));
+    System.out.println("*** BasicShader() after addVertexShader() call ***");
+    
     addFragmentShader(ResourceLoader.loadShader("basicFragment.fs"));
+    System.out.println("*** BasicShader() after addFragmentShader() call ***");
     compileShader();
 
     addUniform("transform");
