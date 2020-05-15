@@ -23,11 +23,13 @@ public class Game {
 
     mesh = ResourceLoader.loadMesh("cube.obj");
     // material = new Material( null, new Vector3f( 0, 1, 1 ) );
-    material = new Material( ResourceLoader.loadTexture( "test.png"), new Vector3f( 0, 1, 1 ) );
+    material = new Material( ResourceLoader.loadTexture( "test.png"), new Vector3f( 1, 1, 1 ) );
     System.out.println("*** Game() ***");
     // shader = new Shader();
-    shader = BasicShader.getInstance();
+    // shader = BasicShader.getInstance();
+    shader = PhongShader.getInstance();
     camera = new Camera();
+    transform = new Transform();
 
 //    Vertex[] vertices = new Vertex[]{new Vertex(new Vector3f(-1, -1, 0),
 //      new Vector2f(0, 0)),
@@ -46,7 +48,8 @@ public class Game {
     
     Transform.setProjection(70f, Window.getWidth(), Window.getHeight(), 0.1f, 1000);
     Transform.setCamera(camera);
-    transform = new Transform();
+    
+    PhongShader.setAmbientLight(new Vector3f( 1, 1, 1 ) );
 
   }
 

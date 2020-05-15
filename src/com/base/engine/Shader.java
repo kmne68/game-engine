@@ -100,7 +100,6 @@ public class Shader {
       System.err.println("Shader creation failed. Could not find valid memory location in constructor.");
       System.exit(1);
     }
-    System.out.println("*** shader.addProgram() after if() ***");
     glShaderSource(shader, text);
     System.out.println("*** shader.addProgram() after glShaderSource() ***");
     
@@ -110,9 +109,7 @@ public class Shader {
     System.out.println("*** glGetShader(shader, GL_COMPILE_STATUS = " + glGetShaderi(shader, GL_COMPILE_STATUS) + " ***");
     
     if (glGetShaderi(shader, GL_COMPILE_STATUS) == 0) {
-      System.out.println("*** inside if(glGetShaderi()... ***");
       System.err.println(glGetShaderInfoLog(shader, 1024));
-      System.out.println("*** inside if(glGetShaderi() after error message... ***");
       System.exit(1);
     }
 
