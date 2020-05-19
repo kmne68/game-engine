@@ -106,13 +106,14 @@ public class Shader {
     glCompileShader(shader);
     System.out.println("*** shader.addProgram() after glCompileShader() ***");
     System.out.println("*** " + GL_COMPILE_STATUS + " ***");
-    System.out.println("*** glGetShader(shader, GL_COMPILE_STATUS = " + glGetShaderi(shader, GL_COMPILE_STATUS) + " ***");
+    System.out.println("*** shader.glGetShader(shader, GL_COMPILE_STATUS = " + glGetShaderi(shader, GL_COMPILE_STATUS) + " ***");
     
     if (glGetShaderi(shader, GL_COMPILE_STATUS) == 0) {
       System.err.println(glGetShaderInfoLog(shader, 1024));
       System.exit(1);
     }
-
+    
+    System.out.println("*** Shader.addProgram() after if ***");
     glAttachShader(program, shader);
   }
 

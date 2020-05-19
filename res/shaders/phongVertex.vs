@@ -2,20 +2,19 @@
 
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 textureCoordinate;    // added in video #21
+layout (location = 2) in vec3 normal;
 
-// out vec4 color;  // deleted in video 21
 out vec2 textureCoordinate0;
+out vec3 normal0;
 
-// uniform float uniformFloat;
+
 uniform mat4 transform;
+uniform mat4 transformProjected;
 
 void main()
-{
-    // color = vec4(clamp(position, 0.0, 1.0), 1.0);
-    
-    //color = vec4(clamp(position, 0.0, uniformFloat), 1.0);
-    // gl_Position = vec4(0.5 * position, 1.0);
-    
-    gl_Position = transform * vec4(position, 1.0);
+{    
+    gl_Position = transformProjected * vec4(position, 1.0);
     textureCoordinate0 = textureCoordinate;
+    normal0 = (transform * vec4(normal, 0.0) ).xyz;
+
 }
