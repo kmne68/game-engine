@@ -7,6 +7,7 @@ package com.base.engine;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 /**
  *
@@ -27,9 +28,9 @@ public class RenderUtil {
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);    // Draw closer things last
 
-        //TODO Depth clamp for later
+    glEnable(GL_DEPTH_CLAMP);
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_FRAMEBUFFER_SRGB);  // Add gamma correction (exponential)
+
   }
 
   public static String getOpenGLVersion() {

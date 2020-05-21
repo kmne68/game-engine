@@ -13,15 +13,16 @@ import org.lwjgl.input.Keyboard;
  */
 public class Game {
 
-  private Material material;
   private Mesh mesh;
   private Shader shader;
+  private Material material;
   private Transform transform;
   private Camera camera;
 
   public Game() {
 
-    mesh = ResourceLoader.loadMesh("cube.obj");
+    //mesh = ResourceLoader.loadMesh("cube.obj");
+    mesh = new Mesh();
     // material = new Material( null, new Vector3f( 0, 1, 1 ) );
     material = new Material( ResourceLoader.loadTexture( "test.png"), new Vector3f( 1, 1, 1 ) );
     System.out.println("*** Game() ***");
@@ -31,14 +32,14 @@ public class Game {
     camera = new Camera();
     transform = new Transform();
 
-    Vertex[] vertices = new Vertex[]{new Vertex(new Vector3f(-1, -1, 0),
-      new Vector2f(0, 0)),
-      new Vertex(new Vector3f(0, 1, 0),
-      new Vector2f(0.5f, 0)),
-      new Vertex(new Vector3f(1, -1, 0),
-      new Vector2f(1.0f, 0)),
-      new Vertex(new Vector3f(0, -1, 1),
-      new Vector2f(0.0f, 0.5f))};
+    Vertex[] vertices = new Vertex[]{ new Vertex(new Vector3f(-1.0f, -1.0f, 0.5773f),
+      new Vector2f(0.0f, 0.0f)),
+      new Vertex(new Vector3f(0.0f, -1.0f, -1.15475f ),
+      new Vector2f(0.5f, 0.0f)),
+      new Vertex(new Vector3f(1.0f, -1.0f, 0.5773f),
+      new Vector2f(1.0f, 0.0f)),
+      new Vertex(new Vector3f(0.0f, 1.0f, 0.0f),
+      new Vector2f(0.5f, 1.0f))};
     int[] indices = new int[]{3, 1, 0,
       2, 1, 3,
       0, 1, 2,
