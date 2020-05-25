@@ -9,22 +9,24 @@ package com.base.engine;
  *
  * @author kmne6
  */
-public class DirectionalLight {
+public class SpotLight {
   
-  private BaseLight base;
+  private PointLight pointLight;
   private Vector3f direction;
+  private float cutoff;
 
-  public DirectionalLight(BaseLight base, Vector3f direction) {
-    this.base = base;
+  public SpotLight(PointLight pointLight, Vector3f direction, float cutoff) {
+    this.pointLight = pointLight;
     this.direction = direction.normalize();
+    this.cutoff = cutoff;
   }
 
-  public BaseLight getBase() {
-    return base;
+  public PointLight getPointLight() {
+    return pointLight;
   }
 
-  public void setBase(BaseLight base) {
-    this.base = base;
+  public void setPointLight(PointLight pointLight) {
+    this.pointLight = pointLight;
   }
 
   public Vector3f getDirection() {
@@ -34,5 +36,13 @@ public class DirectionalLight {
   public void setDirection(Vector3f direction) {
     this.direction = direction.normalize();
   }
+
+  public float getCutoff() {
+    return cutoff;
+  }
+
+  public void setCutoff(float cutoff) {
+    this.cutoff = cutoff;
+  } 
   
 }

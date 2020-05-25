@@ -22,7 +22,15 @@ public class Game {
   PointLight pointLight1 = new PointLight(new BaseLight(new Vector3f(1, 0.5f, 0), 0.8f), new Attenuation(0, 0, 1), new Vector3f(-2, 0, 6f), 10);
   PointLight pointLight2 = new PointLight(new BaseLight(new Vector3f(0, 0.5f, 1), 0.8f), new Attenuation(0, 0, 1), new Vector3f(2, 0, 7f), 10);
     
-
+  SpotLight spotLight1 = new SpotLight(
+                          new PointLight(
+                            new BaseLight(
+                              new Vector3f(0, 1f, 1f), 0.8f), 
+                              new Attenuation(0, 0, 0.1f),
+                              new Vector3f(-2, 0, 5f), 30),
+                              new Vector3f(1, 1, 1), 0.7f);
+  
+  
   public Game() {
 
     //mesh = ResourceLoader.loadMesh("cube.obj");
@@ -69,10 +77,9 @@ public class Game {
     Transform.setCamera(camera);
     
     PhongShader.setAmbientLight(new Vector3f( 0.1f, 0.1f, 0.1f ) );
-    //PhongShader.setDirectionalLight(new DirectionalLight( new BaseLight( new Vector3f(1, 1, 1), 0.8f), new Vector3f(1, 1, 1) ) );
-    
-    PhongShader.setPointLight( new PointLight[] { pointLight1, pointLight2 } );
-
+    // PhongShader.setDirectionalLight(new DirectionalLight( new BaseLight( new Vector3f(1, 1, 1), 0.8f), new Vector3f(1, 1, 1) ) );
+     PhongShader.setPointLight( new PointLight[] { pointLight1, pointLight2 } );
+    PhongShader.setSpotLight(new SpotLight[] {spotLight1});
   }
 
   public void input() {
@@ -110,6 +117,10 @@ public class Game {
     
     pointLight1.setPosition(new Vector3f(3, 0, 8.0f * (float)(Math.sin(temp) + 1.0 / 2.0 ) + 10 ));
     pointLight2.setPosition(new Vector3f(7, 0, 8.0f * (float)(Math.cos(temp) + 1.0 / 2.0 ) + 10 ));
+    
+    // set spotlight's postion to that of the camera
+    spotLight1.getPointLight().setPosition(camera.getPosition());
+    spotLight1.setDirection(camera.getForward());
     
   }
 
