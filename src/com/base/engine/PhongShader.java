@@ -22,7 +22,6 @@ public class PhongShader extends Shader {
   
 
   public static PhongShader getInstance() {
-    System.out.println("*** PhongShader.getInstance() ***");
     return instance;
 
   }
@@ -38,8 +37,8 @@ public class PhongShader extends Shader {
 
     super();
     
-    addVertexShader(ResourceLoader.loadShader("phongVertex.vs"));    
-    addFragmentShader(ResourceLoader.loadShader("phongFragment.fs"));
+    addVertexShaderFromFile("phongVertex.vs");    
+    addFragmentShaderFromFile("phongFragment.fs");
     compileShader();
 
     addUniform("transform");

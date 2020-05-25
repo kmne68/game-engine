@@ -5,6 +5,8 @@
  */
 package com.base.engine;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.HashMap;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL32.*;
@@ -19,9 +21,9 @@ public class Shader {
   private HashMap<String, Integer> uniforms;
 
   public Shader() {
-    
+
     System.out.println("*** Shader() ***");
-    
+
     program = glCreateProgram();
     uniforms = new HashMap<String, Integer>();
 
@@ -30,6 +32,21 @@ public class Shader {
       System.exit(1);
     }
   }
+  
+  
+  public void addVertexShaderFromFile(String text) {
+    addProgram(loadShader(text), GL_VERTEX_SHADER);
+  }
+
+  public void addGeometryShaderFromFile(String text) {
+    addProgram(loadShader(text), GL_GEOMETRY_SHADER);
+  }
+
+  public void addFragmentShaderFromFile(String text) {
+    addProgram(loadShader(text), GL_FRAGMENT_SHADER);
+  }
+  
+  
 
   public void addVertexShader(String text) {
     System.out.println("*** Shader().addVertexShader() ***");
@@ -92,9 +109,9 @@ public class Shader {
 
   private void addProgram(String text, int type) {
     System.out.println("*** Shader().addProgram() ***");
-    
+
     int shader = glCreateShader(type);
-    
+
     System.out.println("*** shader = " + shader + " ***");
     if (shader == 0) {
       System.err.println("Shader creation failed. Could not find valid memory location in constructor.");
@@ -102,17 +119,17 @@ public class Shader {
     }
     glShaderSource(shader, text);
     System.out.println("*** shader.addProgram() after glShaderSource() ***");
-    
+
     glCompileShader(shader);
     System.out.println("*** shader.addProgram() after glCompileShader() ***");
     System.out.println("*** " + GL_COMPILE_STATUS + " ***");
     System.out.println("*** shader.glGetShader(shader, GL_COMPILE_STATUS = " + glGetShaderi(shader, GL_COMPILE_STATUS) + " ***");
-    
+
     if (glGetShaderi(shader, GL_COMPILE_STATUS) == 0) {
       System.err.println(glGetShaderInfoLog(shader, 1024));
       System.exit(1);
     }
-    
+
     System.out.println("*** Shader.addProgram() after if ***");
     glAttachShader(program, shader);
   }
@@ -131,6 +148,27 @@ public class Shader {
 
   public void setUniform(String uniformName, Matrix4f value) {
     glUniformMatrix4(uniforms.get(uniformName), true, BufferUtil.createFlippedBuffer(value));
+  }
+
+  private static String loadShader(String fileName) {
+    StringBuilder shaderSource = new StringBuilder();
+    BufferedReader shaderReader = null;
+
+    try {
+      shaderReader = new BufferedReader(new FileReader("./res/shaders/" + fileName));
+      String line;
+
+      while ((line = shaderReader.readLine()) != null) {
+        shaderSource.append(line).append("\n");
+      }
+
+      shaderReader.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+
+    return shaderSource.toString();
   }
 
 }
