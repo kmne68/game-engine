@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.base.engine;
+package com.base.engine.core;
 
+import com.base.game.TestGame;
+import com.base.engine.rendering.Window;
+import com.base.engine.rendering.RenderUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,24 +19,38 @@ import java.util.logging.Logger;
  * 
  * Use this link for library setup: http://wiki.lwjgl.org/wiki/Setting_Up_LWJGL_with_NetBeans.html
  */
-public class MainComponent {
-    
-    public static final int WIDTH = 600;
-    public static final int HEIGHT = 600;
-    public static final String TITLE = "3D Engine";
-    public static final double FRAME_CAP = 5000.0;
+public class CoreEngine {
+
     
     private boolean isRunning;
     
-    private Game game;
+    private TestGame game;
+    private int width;
+    private int height;
+    private double frameTime;
     
-    public MainComponent()
+    
+    public CoreEngine(int width, int height, int framerate, TestGame game)
     {
-        System.out.println(RenderUtil.getOpenGLVersion());
-        RenderUtil.initGraphics();
-        isRunning = false;
-        game = new Game();
-        System.out.println("MainComponent");
+        this.isRunning = false;
+        this.width = width;
+        this.height = height;
+        this.game = game;
+        this.frameTime = 1.0 / framerate;
+    }
+    
+    
+    public void initializeRenderingSystem() {
+      
+      System.out.println(RenderUtil.getOpenGLVersion());
+      RenderUtil.initGraphics();
+    }
+    
+    
+    public void createWindow(String title) {
+      
+      Window.createWindow(width, height, title);
+      initializeRenderingSystem();
     }
     
     
@@ -59,7 +76,7 @@ public class MainComponent {
         int frames = 0;
         long frameCounter = 0;
         
-        final double frameTime = 1.0 / FRAME_CAP;   // This could be the constant (instead of FRAME_CAP
+        game.init();
         
         long lastTime = Time.getTime();
         double unprocessedTime = 0;
@@ -108,7 +125,7 @@ public class MainComponent {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(MainComponent.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CoreEngine.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -130,12 +147,4 @@ public class MainComponent {
     }
     
     
-    public static void main(String[] args) {
-        
-        Window.createWindow(WIDTH, HEIGHT, TITLE);
-        
-        MainComponent game = new MainComponent();
-        
-        game.start();
-    }
 }

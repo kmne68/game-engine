@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.base.engine;
+package com.base.engine.core;
+
+import com.base.engine.rendering.Camera;
 
 /**
  *

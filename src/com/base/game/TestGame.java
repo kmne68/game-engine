@@ -3,15 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.base.engine;
+package com.base.game;
 
+import com.base.engine.core.Time;
+import com.base.engine.core.Vector3f;
+import com.base.engine.core.Vector2f;
+import com.base.engine.core.Transform;
+import com.base.engine.rendering.Shader;
+import com.base.engine.rendering.DirectionalLight;
+import com.base.engine.rendering.SpotLight;
+import com.base.engine.rendering.Texture;
+import com.base.engine.rendering.RenderUtil;
+import com.base.engine.rendering.Mesh;
+import com.base.engine.rendering.Attenuation;
+import com.base.engine.rendering.Window;
+import com.base.engine.rendering.Camera;
+import com.base.engine.rendering.PhongShader;
+import com.base.engine.rendering.PointLight;
+import com.base.engine.rendering.Material;
+import com.base.engine.rendering.Vertex;
+import com.base.engine.rendering.BaseLight;
 import org.lwjgl.input.Keyboard;
 
 /**
  *
  * @author kmne68
  */
-public class Game {
+public class TestGame implements Game {
 
   private Mesh mesh;
   private Shader shader;
@@ -29,11 +47,11 @@ public class Game {
                               new Attenuation(0, 0, 0.1f),
                               new Vector3f(-2, 0, 5f), 30),
                               new Vector3f(1, 1, 1), 0.7f);
-  
-  
-  public Game() {
 
-    // material = new Material( null, new Vector3f( 0, 1, 1 ) );
+  
+  public void init() {
+    
+ // material = new Material( null, new Vector3f( 0, 1, 1 ) );
                                                                       // the 1 and 8 are specular intensity and exponent, respectively
     material = new Material( new Texture( "test.png"), new Vector3f( 1, 1, 1 ), 1, 8 );
     System.out.println("*** Game() ***");
@@ -79,7 +97,7 @@ public class Game {
      PhongShader.setPointLight( new PointLight[] { pointLight1, pointLight2 } );
     PhongShader.setSpotLight(new SpotLight[] {spotLight1});
   }
-
+  
   public void input() {
 
     camera.input();
@@ -108,8 +126,9 @@ public class Game {
     temp += Time.getDelta();
 
     float tempSin = (float) Math.sin(temp);
-
-    transform.setTranslation(tempSin, -1, 5);
+    
+    transform.setTranslation(0, -1, 5);
+    // transform.setTranslation(tempSin, -1, 5);
     // transform.setRotation(0, tempSin * 180, 0);
     // transform.setScale(0.5f * tempSin, 0.5f * tempSin, 0.5f * tempSin);
     
