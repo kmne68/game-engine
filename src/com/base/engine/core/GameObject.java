@@ -5,6 +5,7 @@
  */
 package com.base.engine.core;
 
+import com.base.engine.rendering.Shader;
 import java.util.ArrayList;
 
 /**
@@ -62,13 +63,13 @@ public class GameObject {
   }
   
   
-  public void render() {
+  public void render(Shader shader) {
         
     for(GameComponent component : components)
-      component.render(transform);
+      component.render(transform, shader);
     
     for(GameObject child : children)
-      child.render();
+      child.render(shader);
     
   }
   

@@ -9,11 +9,31 @@ package com.base.engine.core;
  *
  * @author kmne6
  */
-public interface Game {
+public abstract class Game {
   
-  public void init();
-  public void input();
-  public void update();
-  public void render();
+  
+  private GameObject root;
+  
+  public void init() {}
+  
+  
+  public void input() {
+  
+    getRootObject().input();
+  }
+  
+  public void update() {
+  
+    getRootObject().update();
+  }  
+  
+  public GameObject getRootObject() {
+    
+    if(root == null)
+      root = new GameObject();
+    
+    return root;
+    
+  }
   
 }
