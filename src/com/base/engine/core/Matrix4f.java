@@ -50,9 +50,8 @@ public class Matrix4f {
      * @param zFar      // far limit on Z axis
      * @return 
      */
-    public Matrix4f initProjection(float fov, float width, float height, float zNear, float zFar)
+    public Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar)
     {
-        float aspectRatio = width / height; // used because screen height and width aren't equal 
         float tanHalfMathFOV = (float) Math.tan((Math.toRadians(fov / 2)));
         float zRange = zNear - zFar;
         
@@ -85,7 +84,7 @@ public class Matrix4f {
     }
     
     
-    public Matrix4f initCamera(Vector3f forward, Vector3f up)
+    public Matrix4f initRotation(Vector3f forward, Vector3f up)
     {
         Vector3f f = forward.normalize();
         Vector3f r = up.normalize();

@@ -12,22 +12,7 @@ import com.base.engine.rendering.Camera;
  * @author kmne6
  */
 public class Transform {
-    
-    private static float zNear; // how close an object can be before it gets clipped
-    private static float zFar;  // how far an object can be before it gets clipped
-    private static float screenWidth;
-    private static float screenHeight;
-    private static float fieldOfView;   // for perspective projection
-    private static Camera camera;
 
-    public static Camera getCamera() {
-        return camera;
-    }
-
-    public static void setCamera(Camera aCamera) {
-        camera = aCamera;
-    }
-    
     private Vector3f translation;
     private Vector3f rotation;
     private Vector3f scale;
@@ -53,32 +38,9 @@ public class Transform {
         return translationMatrix.multiplyMatrix(rotationMatrix.multiplyMatrix(scaleMatrix));
     }
     
-    
-    public Matrix4f getProjectedTransformation()
-    {
-        Matrix4f transformationMatrix = getTransformation();
-        Matrix4f projectionMatrix = new Matrix4f().initProjection(fieldOfView, zNear, zNear, zNear, zFar);
-        Matrix4f cameraRotation = new Matrix4f().initCamera(camera.getForward(), camera.getUp());
-        Matrix4f cameraTranslation = new Matrix4f().initTranslation(
-                                        -camera.getPosition().getX(), -camera.getPosition().getY(), -camera.getPosition().getZ());
-        
-        return projectionMatrix.multiplyMatrix(cameraRotation.multiplyMatrix(cameraTranslation.multiplyMatrix(transformationMatrix)));
-    }
-    
 
     public Vector3f getTranslation() {
         return translation;
-    }
-    
-    
-    public static void setProjection(float fov, float width, float height, float zNear, float zFar)
-    {
-        Transform.fieldOfView = fov;
-        Transform.screenWidth = width;
-        Transform.screenHeight = height;
-        Transform.zNear = zNear;
-        Transform.zFar = zFar;
-        
     }
     
 

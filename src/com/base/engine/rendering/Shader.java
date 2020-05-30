@@ -5,6 +5,7 @@
  */
 package com.base.engine.rendering;
 
+import com.base.engine.core.*;
 import com.base.engine.core.BufferUtil;
 import com.base.engine.core.Matrix4f;
 import com.base.engine.core.Vector3f;
@@ -20,6 +21,7 @@ import static org.lwjgl.opengl.GL32.*;
  */
 public class Shader {
 
+  private RenderingEngine renderingEngine;
   private int program;
   private HashMap<String, Integer> uniforms;
 
@@ -35,8 +37,7 @@ public class Shader {
       System.exit(1);
     }
   }
-  
-  
+
   public void addVertexShaderFromFile(String text) {
     addProgram(loadShader(text), GL_VERTEX_SHADER);
   }
@@ -48,8 +49,6 @@ public class Shader {
   public void addFragmentShaderFromFile(String text) {
     addProgram(loadShader(text), GL_FRAGMENT_SHADER);
   }
-  
-  
 
   public void addVertexShader(String text) {
     System.out.println("*** Shader().addVertexShader() ***");
@@ -106,7 +105,7 @@ public class Shader {
     }
   }
 
-  public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material) {
+  public void updateUniforms(Transform transform, Material material) {
     System.out.println("*** Shader().updateUniforms() ***");
   }
 
@@ -172,6 +171,18 @@ public class Shader {
     }
 
     return shaderSource.toString();
+  }
+
+  public void setRenderingEngine(RenderingEngine renderingEngine) {
+
+    this.renderingEngine = renderingEngine;
+
+  }
+
+  public RenderingEngine getRenderingEngine() {
+
+    return renderingEngine;
+
   }
 
 }

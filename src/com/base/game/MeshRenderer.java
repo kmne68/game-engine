@@ -30,7 +30,7 @@ public class MeshRenderer implements GameComponent {
   public void render(Transform transform, Shader shader) {
         
     shader.bind();
-    shader.updateUniforms(transform.getTransformation(), transform.getProjectedTransformation(), material);
+    shader.updateUniforms(transform, material);
     mesh.draw();
   }
 

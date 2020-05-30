@@ -6,6 +6,9 @@
 package com.base.engine.core;
 
 import com.base.engine.rendering.BasicShader;
+import com.base.engine.rendering.Camera;
+import com.base.engine.rendering.Shader;
+import com.base.engine.rendering.Window;
 import static org.lwjgl.opengl.GL11.GL_BACK;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
@@ -30,6 +33,8 @@ import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
  */
 public class RenderingEngine {
   
+  private Camera mainCamera;
+  
   public RenderingEngine() {
     
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // All pixels to black
@@ -42,11 +47,15 @@ public class RenderingEngine {
     glEnable(GL_DEPTH_CLAMP);
     glEnable(GL_TEXTURE_2D);
     
+    mainCamera = new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f );
   }
   
   public void render(GameObject object) {
     
     clearScreen();
+    
+    Shader shader = BasicShader.getInstance();
+    shader.setRenderingEngine(this);
     object.render(BasicShader.getInstance());
   }
   
@@ -79,4 +88,13 @@ public class RenderingEngine {
     glBindTexture(GL_TEXTURE_2D, 0);
     
   }
+
+  public Camera getMainCamera() {
+    return mainCamera;
+  }
+
+  public void setMainCamera(Camera mainCamera) {
+    this.mainCamera = mainCamera;
+  }
+  
 }
