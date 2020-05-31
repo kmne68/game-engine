@@ -33,7 +33,7 @@ import org.lwjgl.input.Keyboard;
  */
 public class TestGame extends Game {
 
-  private Camera camera;
+  // private Camera camera;
   // private GameObject planeObject;
   
   

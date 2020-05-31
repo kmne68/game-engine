@@ -50,6 +50,11 @@ public class RenderingEngine {
     mainCamera = new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f );
   }
   
+  public void input() {
+    
+    mainCamera.input();
+  }
+  
   public void render(GameObject object) {
     
     clearScreen();
@@ -90,10 +95,12 @@ public class RenderingEngine {
   }
 
   public Camera getMainCamera() {
+    
     return mainCamera;
   }
 
   public void setMainCamera(Camera mainCamera) {
+    
     this.mainCamera = mainCamera;
   }
   

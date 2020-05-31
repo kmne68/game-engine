@@ -52,19 +52,20 @@ public class Matrix4f {
      */
     public Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar)
     {
-        float tanHalfMathFOV = (float) Math.tan((Math.toRadians(fov / 2)));
+//        float tanHalfFOV = (float) Math.tan((Math.toRadians(fov / 2)));
+        float tanHalfFOV = (float) Math.tan(fov / 2);
         float zRange = zNear - zFar;
         
         // Divide by each point's distance to center i.e. tanHalfMathFOV
         // x values
-        m[0][0] = 1.0f / tanHalfMathFOV * aspectRatio;
+        m[0][0] = 1.0f / tanHalfFOV * aspectRatio;
         m[0][1] = 0;    
         m[0][2] = 0;    
         m[0][3] = 0;
         
         // y values
         m[1][0] = 0;    
-        m[1][1] = 1 / tanHalfMathFOV;    
+        m[1][1] = 1 / tanHalfFOV;    
         m[1][2] = 0;    
         m[1][3] = 0;
         
