@@ -61,7 +61,7 @@ public class TestGame extends Game {
     
     GameObject planeObject = new GameObject();
     planeObject.addComponent(meshRenderer);
-    planeObject.getTransform().setTranslation(0, -1, 5);
+    planeObject.getTransform().setPosition(0, -1, 5);
     
     getRootObject().addChild(planeObject);
     

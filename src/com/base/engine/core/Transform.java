@@ -13,14 +13,14 @@ import com.base.engine.rendering.Camera;
  */
 public class Transform {
 
-    private Vector3f translation;
+    private Vector3f position;
     private Vector3f rotation;
     private Vector3f scale;
 
     
     public Transform() {
         
-        translation = new Vector3f(0, 0, 0);
+        position = new Vector3f(0, 0, 0);
         rotation    = new Vector3f(0, 0, 0);
         scale       = new Vector3f(1, 1, 1);
     }
@@ -28,9 +28,9 @@ public class Transform {
     
     public Matrix4f getTransformation()
     {
-        Matrix4f translationMatrix  = new Matrix4f().initTranslation(translation.getX(),
-                                                                    translation.getY(),
-                                                                    translation.getZ());
+        Matrix4f translationMatrix  = new Matrix4f().initTranslation(position.getX(),
+                                                                    position.getY(),
+                                                                    position.getZ());
         Matrix4f rotationMatrix     = new Matrix4f().initRotation(rotation.getX(), rotation.getY(), rotation.getZ());
         Matrix4f scaleMatrix        = new Matrix4f().initScale(scale.getX(), scale.getY(), scale.getZ());
         
@@ -39,19 +39,19 @@ public class Transform {
     }
     
 
-    public Vector3f getTranslation() {
-        return translation;
+    public Vector3f getPosition() {
+        return position;
     }
     
 
-    public void setTranslation(Vector3f translation) {
-        this.translation = translation;
+    public void setPosition(Vector3f position) {
+        this.position = position;
     }
     
     
-    public void setTranslation(float x, float y, float z)
+    public void setPosition(float x, float y, float z)
     {
-        this.translation = new Vector3f(x, y, z);
+        this.position = new Vector3f(x, y, z);
     }
     
     
