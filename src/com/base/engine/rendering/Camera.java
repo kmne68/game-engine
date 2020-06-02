@@ -58,9 +58,9 @@ public class Camera {
     return up.crossProduct(forward).normalize();
   }
 
-  public void input() {
+  public void input(float delta) {
     float sensitivity = 0.5f;
-    float moveAmount = (float) (10 * Time.getDelta());
+    float moveAmount = (float) (10 * delta);
     //     float rotationAmount = (float)(100 * Time.getDelta());
 
     if (Input.getKey(Input.KEY_ESCAPE)) {

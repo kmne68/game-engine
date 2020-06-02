@@ -32,14 +32,9 @@ import org.lwjgl.input.Keyboard;
  * @author kmne68
  */
 public class TestGame extends Game {
-
-  // private Camera camera;
-  // private GameObject planeObject;
   
   
   public void init() {
-
-  //  camera = new Camera();
   
     float fieldDepth = 10.0f;
     float fieldWidth = 10.0f;
@@ -65,31 +60,6 @@ public class TestGame extends Game {
     
     getRootObject().addChild(planeObject);
     
-    // getRootObject().addComponent(meshRenderer);
-    
-//    Transform.setProjection(70f, Window.getWidth(), Window.getHeight(), 0.1f, 1000);
-//    Transform.setCamera(camera);
-    
   }
-  
-//  public void input() {
-//
-//    camera.input();
-//    root.input();
-//
-//  }
-//
-//  public void update() {
-//
-//    root.getTransform().setTranslation(0, -1, 5);
-//    root.update();
-//    
-//  }
-//
-//  public void render() {
-//    
-//    root.render();
-//
-//  }
   
 }
