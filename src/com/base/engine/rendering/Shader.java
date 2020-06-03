@@ -60,6 +60,11 @@ public class Shader {
   public void addFragmentShader(String text) {
     addProgram(text, GL_FRAGMENT_SHADER);
   }
+  
+  public void setAttributeLocation(String attributeName, int location) {
+
+    glBindAttribLocation(program, location, attributeName);
+  }
 
   /**
    * Adds a uniform variable for use with shader files
