@@ -7,17 +7,24 @@ package com.base.engine.core;
 
 import com.base.engine.rendering.*;
 import static org.lwjgl.opengl.GL11.GL_BACK;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
 import static org.lwjgl.opengl.GL11.GL_CW;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_EQUAL;
+import static org.lwjgl.opengl.GL11.GL_LESS;
+import static org.lwjgl.opengl.GL11.GL_ONE;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_VERSION;
 import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glCullFace;
+import static org.lwjgl.opengl.GL11.glDepthFunc;
+import static org.lwjgl.opengl.GL11.glDepthMask;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrontFace;
@@ -32,6 +39,7 @@ public class RenderingEngine {
   
   private Camera mainCamera;
   private Vector3f ambientLight;
+  private DirectionalLight directionalLight;
   
   public RenderingEngine() {
     
@@ -47,12 +55,18 @@ public class RenderingEngine {
     
     mainCamera = new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f );
     ambientLight = new Vector3f(0.9f, 0.3f, 0.9f);
+    directionalLight = new DirectionalLight(new BaseLight(new Vector3f(1, 1, 1), 0.8f), new Vector3f(1, 1, 1));
   }
   
   
   public Vector3f getAmbientLight() {
     
     return ambientLight;
+  }
+  
+  public DirectionalLight getDirectionalLight() {
+    
+    return directionalLight;
   }
   
   public void input(float delta) {
@@ -68,6 +82,17 @@ public class RenderingEngine {
     forwardAmbient.setRenderingEngine(this);
     object.render(forwardAmbient);
     
+    glEnable(GL_BLEND);
+    
+    glBlendFunc(GL_ONE, GL_ONE);
+    glDepthMask(false);    
+    glDepthFunc(GL_EQUAL);
+    
+    
+    
+    glDepthFunc(GL_LESS);    
+    glDepthMask(true);
+    glDisable(GL_BLEND);
 //    Shader shader = BasicShader.getInstance();
 //    shader.setRenderingEngine(this);
 //    object.render(BasicShader.getInstance());
