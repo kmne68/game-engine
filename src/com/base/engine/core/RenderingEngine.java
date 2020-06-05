@@ -40,6 +40,8 @@ public class RenderingEngine {
   private Camera mainCamera;
   private Vector3f ambientLight;
   private DirectionalLight directionalLight;
+  private DirectionalLight directionalLight2;
+  private PointLight pointLight;
   
   public RenderingEngine() {
     
@@ -54,8 +56,9 @@ public class RenderingEngine {
     glEnable(GL_TEXTURE_2D);
     
     mainCamera = new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f );
-    ambientLight = new Vector3f(0.9f, 0.3f, 0.9f);
-    directionalLight = new DirectionalLight(new BaseLight(new Vector3f(1, 1, 1), 0.8f), new Vector3f(1, 1, 1));
+    ambientLight = new Vector3f(0.2f, 0.2f, 0.2f);
+    directionalLight = new DirectionalLight(new BaseLight(new Vector3f(0, 0, 1), 0.4f), new Vector3f(1, 1, 1));
+    directionalLight2 = new DirectionalLight(new BaseLight(new Vector3f(1, 0, 0), 0.4f), new Vector3f(-1, 1, -1));
   }
   
   
@@ -69,6 +72,11 @@ public class RenderingEngine {
     return directionalLight;
   }
   
+  public PointLight getPointLight() {
+    
+    return pointLight;
+  }
+  
   public void input(float delta) {
     
     mainCamera.input(delta);
@@ -79,16 +87,30 @@ public class RenderingEngine {
     clearScreen();
     
     Shader forwardAmbient = ForwardAmbient.getInstance();
+    Shader forwardDirectional = ForwardDirectional.getInstance();
+    
     forwardAmbient.setRenderingEngine(this);
+    forwardDirectional.setRenderingEngine(this);
+    
     object.render(forwardAmbient);
     
-    glEnable(GL_BLEND);
-    
+    glEnable(GL_BLEND);    
     glBlendFunc(GL_ONE, GL_ONE);
     glDepthMask(false);    
     glDepthFunc(GL_EQUAL);
     
+    object.render(forwardDirectional);
     
+    // experiment
+    DirectionalLight temp = directionalLight;
+    directionalLight = directionalLight2;
+    directionalLight2 = temp;
+    
+    object.render(forwardDirectional);
+    
+    temp = directionalLight;
+    directionalLight = directionalLight2;
+    directionalLight2 = temp;
     
     glDepthFunc(GL_LESS);    
     glDepthMask(true);
