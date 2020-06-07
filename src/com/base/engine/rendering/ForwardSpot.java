@@ -12,22 +12,22 @@ import com.base.engine.core.Transform;
  *
  * @author kmne6
  */
-public class ForwardPoint extends Shader {
+public class ForwardSpot extends Shader {
 
-  private static final ForwardPoint instance = new ForwardPoint();
+  private static final ForwardSpot instance = new ForwardSpot();
 
-  public static ForwardPoint getInstance() {
+  public static ForwardSpot getInstance() {
 
     return instance;
 
   }
 
-  private ForwardPoint() {
+  private ForwardSpot() {
 
     super();
 
-    addVertexShaderFromFile("forward-point.vs");
-    addFragmentShaderFromFile("forward-point.fs");
+    addVertexShaderFromFile("forward-spot.vs");
+    addFragmentShaderFromFile("forward-spot.fs");
 
     setAttributeLocation("position", 0);
     setAttributeLocation("textureCoordinate", 1);
@@ -42,13 +42,15 @@ public class ForwardPoint extends Shader {
     addUniform("specularPower");
     addUniform("eyePosition");
 
-    addUniform("pointLight.base.color");
-    addUniform("pointLight.base.intensity");
-    addUniform("pointLight.attenuation.constant");
-    addUniform("pointLight.attenuation.linear");
-    addUniform("pointLight.attenuation.exponent");
-    addUniform("pointLight.position");
-    addUniform("pointLight.range");
+    addUniform("spotLight.pointLight.base.color");
+    addUniform("spotLight.pointLight.base.intensity");
+    addUniform("spotLight.pointLight.attenuation.constant");
+    addUniform("spotLight.pointLight.attenuation.linear");
+    addUniform("spotLight.pointLight.attenuation.exponent");
+    addUniform("spotLight.pointLight.position");
+    addUniform("spotLight.pointLight.range");
+    addUniform("spotLight.direction");
+    addUniform("spotLight.cutoff");
 
   }
 
@@ -65,7 +67,7 @@ public class ForwardPoint extends Shader {
     setUniformf("specularPower", material.getSpecularPower());
 
     setUniform("eyePosition", getRenderingEngine().getMainCamera().getPosition());
-    setUniform("pointLight", getRenderingEngine().getPointLight());
+    setUniform("spotLight", getRenderingEngine().getSpotLight());
 
 //    setUniform("MVP", projectedMatrix);
 //    setUniform("ambientIntensity", getRenderingEngine().getAmbientLight());
@@ -78,7 +80,7 @@ public class ForwardPoint extends Shader {
   }
 
   public void setUniform(String uniformName, PointLight pointLight) {
-    
+
     setUniform(uniformName + ".base", pointLight.getBaseLight());
     setUniformf(uniformName + ".attenuation.constant", pointLight.getAttenuation().getConstant());
     setUniformf(uniformName + ".attenuation.linear", pointLight.getAttenuation().getLinear());
@@ -86,5 +88,12 @@ public class ForwardPoint extends Shader {
     setUniform(uniformName + ".position", pointLight.getPosition());
     setUniformf(uniformName + ".range", pointLight.getRange());
   }
-  
+
+  public void setUniform(String uniformName, SpotLight spotLight) {
+
+    setUniform(uniformName + ".pointLight", spotLight.getPointLight());
+    setUniform(uniformName + ".direction", spotLight.getDirection());
+    setUniformf(uniformName + ".cutoff", spotLight.getCutoff());
+  }
+
 }
