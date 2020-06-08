@@ -3,16 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.base.engine.rendering;
+package com.base.engine.components;
 
+import com.base.engine.core.RenderingEngine;
 import com.base.engine.core.Vector3f;
+import com.base.engine.rendering.Attenuation;
+import com.base.engine.rendering.BaseLight;
 
 /**
  *
  * @author kmne6
  */
-public class PointLight {
-  
+public class PointLight extends GameComponent {
+
   private BaseLight baseLight;
   private Attenuation attenuation;
   private Vector3f position;
@@ -23,6 +26,12 @@ public class PointLight {
     this.attenuation = attenuation;
     this.position = position;
     this.range = range;
+  }
+
+  @Override
+  public void addToRenderingEngine(RenderingEngine renderingEngine) {
+
+    renderingEngine.addPointLight(this);
   }
 
   public BaseLight getBaseLight() {
@@ -47,7 +56,7 @@ public class PointLight {
 
   public void setPosition(Vector3f position) {
     this.position = position;
-  }  
+  }
 
   public float getRange() {
     return range;
@@ -56,5 +65,5 @@ public class PointLight {
   public void setRange(float range) {
     this.range = range;
   }
-  
+
 }

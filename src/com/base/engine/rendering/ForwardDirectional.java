@@ -5,6 +5,7 @@
  */
 package com.base.engine.rendering;
 
+import com.base.engine.components.DirectionalLight;
 import com.base.engine.core.Matrix4f;
 import com.base.engine.core.Transform;
 
