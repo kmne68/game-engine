@@ -5,6 +5,7 @@
  */
 package com.base.engine.rendering;
 
+import com.base.engine.components.BaseLight;
 import com.base.engine.components.PointLight;
 import com.base.engine.core.Matrix4f;
 import com.base.engine.core.Transform;
@@ -66,21 +67,21 @@ public class ForwardPoint extends Shader {
     setUniformf("specularPower", material.getSpecularPower());
 
     setUniform("eyePosition", getRenderingEngine().getMainCamera().getPosition());
-    setUniform("pointLight", getRenderingEngine().getPointLight());
+    setUniformPointLight("pointLight", (PointLight) getRenderingEngine().getActiveLight());
 
 //    setUniform("MVP", projectedMatrix);
 //    setUniform("ambientIntensity", getRenderingEngine().getAmbientLight());
   }
 
-  public void setUniform(String uniformName, BaseLight baseLight) {
+  public void setUniformBaseLight(String uniformName, BaseLight baseLight) {
 
     setUniform(uniformName + ".color", baseLight.getColor());
     setUniformf(uniformName + ".intensity", baseLight.getIntensity());
   }
 
-  public void setUniform(String uniformName, PointLight pointLight) {
+  public void setUniformPointLight(String uniformName, PointLight pointLight) {
     
-    setUniform(uniformName + ".base", pointLight.getBaseLight());
+    setUniformBaseLight(uniformName + ".base", pointLight);
     setUniformf(uniformName + ".attenuation.constant", pointLight.getAttenuation().getConstant());
     setUniformf(uniformName + ".attenuation.linear", pointLight.getAttenuation().getLinear());
     setUniformf(uniformName + ".attenuation.exponent", pointLight.getAttenuation().getExponent());

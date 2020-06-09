@@ -5,33 +5,29 @@
  */
 package com.base.engine.components;
 
-import com.base.engine.core.RenderingEngine;
 import com.base.engine.core.Vector3f;
 import com.base.engine.rendering.Attenuation;
-import com.base.engine.rendering.BaseLight;
+import com.base.engine.rendering.ForwardPoint;
 
 /**
  *
  * @author kmne6
  */
-public class PointLight extends GameComponent {
+public class PointLight extends BaseLight {
 
   private BaseLight baseLight;
   private Attenuation attenuation;
   private Vector3f position;
   private float range;
 
-  public PointLight(BaseLight baseLight, Attenuation attenuation, Vector3f position, float range) {
-    this.baseLight = baseLight;
+  public PointLight(Vector3f color, float intensity, Attenuation attenuation, Vector3f position, float range) {
+  
+    super(color, intensity);
     this.attenuation = attenuation;
     this.position = position;
     this.range = range;
-  }
-
-  @Override
-  public void addToRenderingEngine(RenderingEngine renderingEngine) {
-
-    renderingEngine.addPointLight(this);
+    
+    setShader(ForwardPoint.getInstance());
   }
 
   public BaseLight getBaseLight() {

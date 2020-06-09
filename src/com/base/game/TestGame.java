@@ -20,11 +20,10 @@ import com.base.engine.rendering.Mesh;
 import com.base.engine.rendering.Attenuation;
 import com.base.engine.rendering.Window;
 import com.base.engine.rendering.Camera;
-import com.base.engine.rendering.PhongShader;
 import com.base.engine.components.PointLight;
 import com.base.engine.rendering.Material;
 import com.base.engine.rendering.Vertex;
-import com.base.engine.rendering.BaseLight;
+import com.base.engine.components.BaseLight;
 import com.base.engine.rendering.BasicShader;
 import org.lwjgl.input.Keyboard;
 
@@ -59,18 +58,18 @@ public class TestGame extends Game {
     planeObject.getTransform().setPosition(0, -1, 5);
 
     GameObject directionalLightObject = new GameObject();
-    DirectionalLight directionalLight = new DirectionalLight(new BaseLight(new Vector3f(0, 0, 1), 0.4f), new Vector3f(1, 1, 1));
+    DirectionalLight directionalLight = new DirectionalLight(new Vector3f(0, 0, 1), 0.4f, new Vector3f(1, 1, 1));
     directionalLightObject.addComponent(directionalLight);
 
     new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);
 
-    GameObject pointLightObject = new GameObject();
-    PointLight pointLight = new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);
-    pointLightObject.addComponent(pointLight);
+//    GameObject pointLightObject = new GameObject();
+//    PointLight pointLight = new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);
+//    pointLightObject.addComponent(pointLight);
 
     getRootObject().addChild(planeObject);
     getRootObject().addChild(directionalLightObject);
-    getRootObject().addChild(pointLightObject);
+//    getRootObject().addChild(pointLightObject);
 
   }
 
