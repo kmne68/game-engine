@@ -8,24 +8,15 @@ package com.base.game;
 import com.base.engine.components.MeshRenderer;
 import com.base.engine.core.Game;
 import com.base.engine.core.GameObject;
-import com.base.engine.core.Time;
 import com.base.engine.core.Vector3f;
 import com.base.engine.core.Vector2f;
-import com.base.engine.core.Transform;
-import com.base.engine.rendering.Shader;
 import com.base.engine.components.DirectionalLight;
-import com.base.engine.rendering.SpotLight;
 import com.base.engine.rendering.Texture;
 import com.base.engine.rendering.Mesh;
-import com.base.engine.rendering.Attenuation;
-import com.base.engine.rendering.Window;
-import com.base.engine.rendering.Camera;
 import com.base.engine.components.PointLight;
+import com.base.engine.components.SpotLight;
 import com.base.engine.rendering.Material;
 import com.base.engine.rendering.Vertex;
-import com.base.engine.components.BaseLight;
-import com.base.engine.rendering.BasicShader;
-import org.lwjgl.input.Keyboard;
 
 /**
  *
@@ -61,7 +52,16 @@ public class TestGame extends Game {
     DirectionalLight directionalLight = new DirectionalLight(new Vector3f(0, 0, 1), 0.4f, new Vector3f(1, 1, 1));
     directionalLightObject.addComponent(directionalLight);
 
-    new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);
+    GameObject pointLightObject = new GameObject();
+    pointLightObject.addComponent(new PointLight(new Vector3f(0, 1, 0), 0.4f, 0, 0, 1, new Vector3f(3, 0, 3), 100));
+    
+    SpotLight spotLight = new SpotLight(new Vector3f(0, 1, 1), 0.4f,
+            0.0f, 0.0f, 0.1f,
+            new Vector3f(5, 0, 5), 100.0f,
+            new Vector3f(1, 0, 0), 0.7f);
+    
+    GameObject spotLightObject = new GameObject();
+    spotLightObject.addComponent(spotLight);
 
 //    GameObject pointLightObject = new GameObject();
 //    PointLight pointLight = new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);
@@ -69,7 +69,8 @@ public class TestGame extends Game {
 
     getRootObject().addChild(planeObject);
     getRootObject().addChild(directionalLightObject);
-//    getRootObject().addChild(pointLightObject);
+    getRootObject().addChild(pointLightObject);
+    getRootObject().addChild(spotLightObject);
 
   }
 

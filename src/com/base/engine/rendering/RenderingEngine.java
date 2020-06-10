@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.base.engine.core;
+package com.base.engine.rendering;
 
 import com.base.engine.components.BaseLight;
+import com.base.engine.core.GameObject;
+import com.base.engine.core.Vector3f;
 import com.base.engine.rendering.*;
 import java.util.ArrayList;
 import static org.lwjgl.opengl.GL11.GL_BACK;
@@ -108,14 +110,7 @@ public class RenderingEngine {
     object.addToRenderingEngine(this);
     
     Shader forwardAmbient = ForwardAmbient.getInstance();
-    Shader forwardPoint = ForwardPoint.getInstance();
-    Shader forwardDirectional = ForwardDirectional.getInstance();
-    Shader forwardSpot = ForwardSpot.getInstance();
-    
     forwardAmbient.setRenderingEngine(this);
-    forwardDirectional.setRenderingEngine(this);
-    forwardPoint.setRenderingEngine(this);
-    forwardSpot.setRenderingEngine(this);
     
     object.render(forwardAmbient);
     

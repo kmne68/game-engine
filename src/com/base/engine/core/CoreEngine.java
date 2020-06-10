@@ -5,6 +5,7 @@
  */
 package com.base.engine.core;
 
+import com.base.engine.rendering.RenderingEngine;
 import com.base.game.TestGame;
 import com.base.engine.rendering.Window;
 import java.util.logging.Level;
