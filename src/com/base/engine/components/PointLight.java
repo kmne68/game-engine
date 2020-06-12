@@ -15,17 +15,15 @@ import com.base.engine.rendering.ForwardPoint;
 public class PointLight extends BaseLight {
 
   private BaseLight baseLight;
-  private Vector3f position;
   private Vector3f attenuation;
   private float range;
 
 
-  public PointLight(Vector3f color, float intensity, Vector3f attenuation, Vector3f position, float range) {
+  public PointLight(Vector3f color, float intensity, Vector3f attenuation) {
   
     super(color, intensity);
-    this.position = position;
-    this.range    = range;
     this.attenuation = attenuation;
+    this.range    = 1000.0f;      //TODO: Calculate this
     
     setShader(ForwardPoint.getInstance());
   }
@@ -36,14 +34,6 @@ public class PointLight extends BaseLight {
 
   public void setBaseLight(BaseLight baseLight) {
     this.baseLight = baseLight;
-  }
-
-  public Vector3f getPosition() {
-    return position;
-  }
-
-  public void setPosition(Vector3f position) {
-    this.position = position;
   }
 
   public float getRange() {
