@@ -14,7 +14,8 @@ import com.base.engine.rendering.ForwardPoint;
  */
 public class PointLight extends BaseLight {
 
-  private BaseLight baseLight;
+  private static final int COLOR_DEPTH = 256;
+  
   private Vector3f attenuation;
   private float range;
 
@@ -23,17 +24,14 @@ public class PointLight extends BaseLight {
   
     super(color, intensity);
     this.attenuation = attenuation;
-    this.range    = 1000.0f;      //TODO: Calculate this
+    
+    float attenuationA = attenuation.getZ();
+    float attenuationB = attenuation.getY();
+    float attenuationC = attenuation.getX() - COLOR_DEPTH * getIntensity() * getColor().max();    
+    
+    this.range = (float) ( -attenuationB + Math.sqrt( attenuationB * attenuationB - 4 * attenuationA * attenuationC ) ) / ( 2 * attenuationA );
     
     setShader(ForwardPoint.getInstance());
-  }
-
-  public BaseLight getBaseLight() {
-    return baseLight;
-  }
-
-  public void setBaseLight(BaseLight baseLight) {
-    this.baseLight = baseLight;
   }
 
   public float getRange() {

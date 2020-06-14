@@ -24,6 +24,11 @@ public class Vector3f {
   public float length() {
     return (float) Math.sqrt(x * x + y * y + z * z);
   }
+  
+  public float max() {
+    
+    return Math.max(x, Math.max(y, z));
+  }
 
   /**
    * Convert axis of rotation into a quaternion

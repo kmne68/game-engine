@@ -23,6 +23,11 @@ public class Vector2f {
   public float length() {
     return (float) Math.sqrt(x * x + y * y);
   }
+  
+  public float max() {
+    
+    return Math.max(x, y);
+  }
 
   // The dot product of this vector and another
   public float dot(Vector2f r) {

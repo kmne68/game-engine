@@ -73,6 +73,8 @@ public class TestGame extends Game {
     
     GameObject spotLightObject = new GameObject();
     spotLightObject.addComponent(spotLight);
+    
+    spotLight.getTransform().setPosition(5, 0, 5);
 
 //    GameObject pointLightObject = new GameObject();
 //    PointLight pointLight = new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);
