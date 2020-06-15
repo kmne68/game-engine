@@ -149,6 +149,14 @@ public class Vector3f {
     return new Vector2f(x, z);
   }
   
+  public void setVector3f(float x, float y, float z) {
+    
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    
+  }
+  
   public float getX() {
     return x;
   }

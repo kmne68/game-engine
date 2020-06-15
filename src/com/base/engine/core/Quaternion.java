@@ -68,6 +68,41 @@ public class Quaternion {
         return new Quaternion(x_, y_, z_, w_);
     }
     
+    public Matrix4f toRotationMatrix() {
+      
+      return null;
+    }
+    
+    public Vector3f getForward() {
+      
+      return new Vector3f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y));
+    }
+    
+    public Vector3f getBack() {
+      
+      return new Vector3f(-2.0f * (x * z - w * y), -2.0f * (y * z + w * x), -(1.0f - 2.0f * (x * x + y * y)));
+    }
+    
+    public Vector3f getUp() {
+      
+      return new Vector3f(2.0f *  (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
+    }
+    
+    public Vector3f getDown() {
+      
+      return new Vector3f(-2.0f * (x * y + w * z), -(1.0f - 2.0f * (x * x + z * z)), -2.0f * (y * z - w * x));
+    }
+    
+    public Vector3f getRight() {
+      
+      return new Vector3f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
+    }
+    
+    public Vector3f getLeft() {
+      
+      return new Vector3f(-(1.0f - 2.0f * (y * y + z * z)), -2.0f * (x * y - w * z), -2.0f * (x * z + w * y));
+    }
+    
     
     public float getX() {
         return x;

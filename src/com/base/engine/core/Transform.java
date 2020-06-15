@@ -14,15 +14,15 @@ import com.base.engine.rendering.Camera;
 public class Transform {
 
     private Vector3f position;
-    private Vector3f rotation;
     private Vector3f scale;
+    private Quaternion rotation;
 
     
     public Transform() {
         
         position = new Vector3f(0, 0, 0);
-        rotation    = new Vector3f(0, 0, 0);
         scale       = new Vector3f(1, 1, 1);
+        rotation    = new Quaternion(0, 0, 0, 1);
     }
     
     
@@ -31,7 +31,7 @@ public class Transform {
         Matrix4f translationMatrix  = new Matrix4f().initTranslation(position.getX(),
                                                                     position.getY(),
                                                                     position.getZ());
-        Matrix4f rotationMatrix     = new Matrix4f().initRotation(rotation.getX(), rotation.getY(), rotation.getZ());
+        Matrix4f rotationMatrix     = null; // rotation.toRotationMatrix(); // new Matrix4f().initRotation(rotation.getX(), rotation.getY(), rotation.getZ());
         Matrix4f scaleMatrix        = new Matrix4f().initScale(scale.getX(), scale.getY(), scale.getZ());
         
         // Apply scale transformation first
@@ -56,21 +56,16 @@ public class Transform {
     
     
     
-    public Vector3f getRotation() {
+    public Quaternion getRotation() {
         return rotation;
     }
     
 
-    public void setRotation(Vector3f rotation) {
+    public void setRotation(Quaternion rotation) {
         this.rotation = rotation;
     }
     
     
-    public void setRotation(float x, float y, float z)
-    {
-        this.rotation = new Vector3f(x, y, z);
-    }
-
     public Vector3f getScale() {
         return scale;
     }
@@ -78,11 +73,6 @@ public class Transform {
     public void setScale(Vector3f scale) {
         this.scale = scale;
     }
-    
-    
-    public void setScale(float x, float y, float z)
-    {
-        this.scale = new Vector3f(x, y, z);
-    }
+
     
 }
