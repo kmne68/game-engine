@@ -25,14 +25,14 @@ public class Camera {
     this.position = new Vector3f(0, 0, 0);
     this.forward = new Vector3f(0, 0, 1).normalize();
     this.up = new Vector3f(0, 1, 0).normalize();
-    this.projection = new Matrix4f().initPerspective(fieldOfView, aspect, zNear, zFar);
+    this.projection = new Matrix4f().initializePerspective(fieldOfView, aspect, zNear, zFar);
 
   }
 
   public Matrix4f getViewProjection() {
 
-    Matrix4f cameraRotation = new Matrix4f().initRotation(forward, up);
-    Matrix4f cameraTranslation = new Matrix4f().initTranslation(
+    Matrix4f cameraRotation = new Matrix4f().initializeRotation(forward, up);
+    Matrix4f cameraTranslation = new Matrix4f().initializeTranslation(
             -position.getX(), -position.getY(), -position.getZ());
 
     return projection.multiplyMatrix(cameraRotation.multiplyMatrix(cameraTranslation));

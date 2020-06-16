@@ -20,7 +20,7 @@ public class Matrix4f {
     
     
     // Sets matrix m equal to the identity matrix
-    public Matrix4f initIdentity()
+    public Matrix4f initializeIdentity()
     {
         m[0][0] = 1;    m[0][1] = 0;    m[0][2] = 0;    m[0][3] = 0;
         m[1][0] = 0;    m[1][1] = 1;    m[1][2] = 0;    m[1][3] = 0;
@@ -31,7 +31,7 @@ public class Matrix4f {
     }
     
     
-    public Matrix4f initTranslation(float x, float y, float z)
+    public Matrix4f initializeTranslation(float x, float y, float z)
     {
         m[0][0] = 1;    m[0][1] = 0;    m[0][2] = 0;    m[0][3] = x;
         m[1][0] = 0;    m[1][1] = 1;    m[1][2] = 0;    m[1][3] = y;
@@ -50,7 +50,7 @@ public class Matrix4f {
      * @param zFar      // far limit on Z axis
      * @return 
      */
-    public Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar)
+    public Matrix4f initializePerspective(float fov, float aspectRatio, float zNear, float zFar)
     {
 //        float tanHalfFOV = (float) Math.tan((Math.toRadians(fov / 2)));
         float tanHalfFOV = (float) Math.tan(fov / 2);
@@ -85,7 +85,7 @@ public class Matrix4f {
     }
     
     
-    public Matrix4f initOrothographicProjection(float left, float right, float bottom, float top, float near, float far)
+    public Matrix4f initializeOrothographicProjection(float left, float right, float bottom, float top, float near, float far)
     {
       float width = right - left;
       float height = top - bottom;
@@ -101,7 +101,7 @@ public class Matrix4f {
     }
     
     
-    public Matrix4f initRotation(Vector3f forward, Vector3f up)
+    public Matrix4f initializeRotation(Vector3f forward, Vector3f up)
     {
         Vector3f f = forward.normalize();
         Vector3f r = up.normalize();
@@ -110,6 +110,17 @@ public class Matrix4f {
         
         Vector3f u = f.crossProduct(r);
         
+        return initializeRotation(f, u, r);
+        
+    }
+    
+    
+        public Matrix4f initializeRotation(Vector3f forward, Vector3f up, Vector3f right)
+    {
+        Vector3f f = forward;
+        Vector3f r = right;
+        Vector3f u = up;
+        
         m[0][0] = r.getX();    m[0][1] = r.getY();    m[0][2] = r.getZ();    m[0][3] = 0;
         m[1][0] = u.getX();    m[1][1] = u.getY();    m[1][2] = u.getZ();    m[1][3] = 0;
         m[2][0] = f.getX();    m[2][1] = f.getY();    m[2][2] = f.getZ();    m[2][3] = 0;
@@ -117,7 +128,6 @@ public class Matrix4f {
         
         return this;
     }
-    
     
     /**
      * Rotate in each two-dimensional plane then multiply the products to get
@@ -128,7 +138,7 @@ public class Matrix4f {
      * @param z
      * @return 
      */
-    public Matrix4f initRotation(float x, float y, float z)
+    public Matrix4f initializeRotation(float x, float y, float z)
     {
         Matrix4f rx = new Matrix4f();
         Matrix4f ry = new Matrix4f();
@@ -160,7 +170,7 @@ public class Matrix4f {
     }    
     
     
-    public Matrix4f initScale(float x, float y, float z)
+    public Matrix4f initializeScale(float x, float y, float z)
     {
         m[0][0] = x;    m[0][1] = 0;    m[0][2] = 0;    m[0][3] = 0;    // row calculates final x component
         m[1][0] = 0;    m[1][1] = y;    m[1][2] = 0;    m[1][3] = 0;    // row calculates final y component

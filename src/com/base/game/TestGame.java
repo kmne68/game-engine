@@ -15,6 +15,7 @@ import com.base.engine.rendering.Texture;
 import com.base.engine.rendering.Mesh;
 import com.base.engine.components.PointLight;
 import com.base.engine.components.SpotLight;
+import com.base.engine.core.Quaternion;
 import com.base.engine.rendering.Material;
 import com.base.engine.rendering.Vertex;
 
@@ -67,14 +68,14 @@ public class TestGame extends Game {
      * float      cutoff
      * 
      */
-    SpotLight spotLight = new SpotLight(new Vector3f(1, 0, 1), 0.9f,
-            new Vector3f(0, 0, 0.1f),
-            new Vector3f(1, 0, 0), 0.1f);
+    SpotLight spotLight = new SpotLight(new Vector3f(0, 1, 1), 0.4f,
+            new Vector3f(0, 0, 0.1f), 0.7f);
     
     GameObject spotLightObject = new GameObject();
     spotLightObject.addComponent(spotLight);
     
-    spotLight.getTransform().getPosition().setVector3f(5, 0, 5);
+    spotLight.getTransform().getPosition().setVector3f(7, 0, 7);
+    spotLight.getTransform().setRotation(new Quaternion().initializeRotation(new Vector3f(0, 1, 0), (float) Math.toRadians(-90.0f)));
 
 //    GameObject pointLightObject = new GameObject();
 //    PointLight pointLight = new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);

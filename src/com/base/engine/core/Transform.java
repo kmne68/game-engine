@@ -28,11 +28,12 @@ public class Transform {
     
     public Matrix4f getTransformation()
     {
-        Matrix4f translationMatrix  = new Matrix4f().initTranslation(position.getX(),
+        Matrix4f translationMatrix  = new Matrix4f().initializeTranslation(position.getX(),
                                                                     position.getY(),
                                                                     position.getZ());
-        Matrix4f rotationMatrix     = null; // rotation.toRotationMatrix(); // new Matrix4f().initRotation(rotation.getX(), rotation.getY(), rotation.getZ());
-        Matrix4f scaleMatrix        = new Matrix4f().initScale(scale.getX(), scale.getY(), scale.getZ());
+        
+        Matrix4f rotationMatrix     =  rotation.toRotationMatrix();
+        Matrix4f scaleMatrix        = new Matrix4f().initializeScale(scale.getX(), scale.getY(), scale.getZ());
         
         // Apply scale transformation first
         return translationMatrix.multiplyMatrix(rotationMatrix.multiplyMatrix(scaleMatrix));
