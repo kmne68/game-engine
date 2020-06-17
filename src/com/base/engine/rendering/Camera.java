@@ -43,9 +43,11 @@ public class Camera {
   Vector2f centerPosition = new Vector2f(
           Window.getWidth() / 2, Window.getHeight() / 2);
 
+  
   public void move(Vector3f direction, float amount) {
     position = position.add(direction.multiply(amount));
   }
+  
 
   /**
    * Get normalized vector facing left
@@ -102,10 +104,10 @@ public class Camera {
       boolean rotateX = deltaPosition.getY() != 0;
 
       if (rotateY) {
-        rotateY(deltaPosition.getX() * sensitivity);
+        rotateY( (float) Math.toRadians(deltaPosition.getX() * sensitivity ) );
       }
       if (rotateX) {
-        rotateX(-deltaPosition.getY() * sensitivity);
+        rotateX( (float) Math.toRadians(-deltaPosition.getY() * sensitivity ) );
       }
 
       if (rotateY || rotateX) {
