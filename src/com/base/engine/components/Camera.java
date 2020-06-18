@@ -3,40 +3,51 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.base.engine.rendering;
+package com.base.engine.components;
 
 import com.base.engine.core.*;
+import com.base.engine.rendering.RenderingEngine;
+import com.base.engine.rendering.Window;
 
 /**
  *
  * @author kmne6
  */
-public class Camera {
+public class Camera extends GameComponent {
 
   public static final Vector3f yAxis = new Vector3f(0, 1, 0);
 
-  private Vector3f position;
-  private Vector3f forward;
-  private Vector3f up;
+//  private Vector3f position;
+//  private Vector3f forward;
+//  private Vector3f up;
   private Matrix4f projection;
 
   public Camera(float fieldOfView, float aspect, float zNear, float zFar) {
 
-    this.position = new Vector3f(0, 0, 0);
-    this.forward = new Vector3f(0, 0, 1).normalize();
-    this.up = new Vector3f(0, 1, 0).normalize();
+//    this.position = new Vector3f(0, 0, 0);
+//    this.forward = new Vector3f(0, 0, 1).normalize();
+//    this.up = new Vector3f(0, 1, 0).normalize();
     this.projection = new Matrix4f().initializePerspective(fieldOfView, aspect, zNear, zFar);
 
   }
 
+  
   public Matrix4f getViewProjection() {
 
-    Matrix4f cameraRotation = new Matrix4f().initializeRotation(forward, up);
+    Matrix4f cameraRotation = getTransform().getRotation().toRotationMatrix();
     Matrix4f cameraTranslation = new Matrix4f().initializeTranslation(
             -position.getX(), -position.getY(), -position.getZ());
 
     return projection.multiplyMatrix(cameraRotation.multiplyMatrix(cameraTranslation));
   }
+  
+  
+  @Override
+  public void addToRenderingEngine(RenderingEngine renderingEngine) {
+    
+    renderingEngine.addCamera(this);
+  }
+  
 
   boolean mouseLocked = false;
 
@@ -60,6 +71,8 @@ public class Camera {
     return up.crossProduct(forward).normalize();
   }
 
+  
+  @Override
   public void input(float delta) {
     float sensitivity = 0.5f;
     float moveAmount = (float) (10 * delta);
@@ -120,7 +133,7 @@ public class Camera {
   public void rotateY(float angle) {
     Vector3f hAxis = yAxis.crossProduct(forward).normalize();
 
-    forward = forward.rotate(angle, yAxis).normalize();
+    forward = forward.rotate(yAxis, angle).normalize();
 
     up = forward.crossProduct(hAxis).normalize();
 
@@ -129,7 +142,7 @@ public class Camera {
   public void rotateX(float angle) {
     Vector3f hAxis = yAxis.crossProduct(forward).normalize();
 
-    forward = forward.rotate(angle, hAxis).normalize();
+    forward = forward.rotate(hAxis, angle).normalize();
 
     up = forward.crossProduct(hAxis).normalize();
 
