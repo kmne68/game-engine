@@ -37,10 +37,12 @@ public class GameObject {
   }
   
   
-  public void addComponent(GameComponent component) {
+  public GameObject addComponent(GameComponent component) {
     
     components.add(component);
     component.setParent(this);
+    
+    return this;
     
   }
   

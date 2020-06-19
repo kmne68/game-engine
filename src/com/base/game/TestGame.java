@@ -5,6 +5,7 @@
  */
 package com.base.game;
 
+import com.base.engine.components.Camera;
 import com.base.engine.components.MeshRenderer;
 import com.base.engine.core.Game;
 import com.base.engine.core.GameObject;
@@ -18,6 +19,7 @@ import com.base.engine.components.SpotLight;
 import com.base.engine.core.Quaternion;
 import com.base.engine.rendering.Material;
 import com.base.engine.rendering.Vertex;
+import com.base.engine.rendering.Window;
 
 /**
  *
@@ -85,6 +87,8 @@ public class TestGame extends Game {
     getRootObject().addChild(directionalLightObject);
     getRootObject().addChild(pointLightObject);
     getRootObject().addChild(spotLightObject);
+    
+    getRootObject().addChild(new GameObject().addComponent(new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f)));
 
   }
 
