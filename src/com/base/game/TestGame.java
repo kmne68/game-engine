@@ -38,9 +38,20 @@ public class TestGame extends Game {
       new Vertex(new Vector3f(fieldWidth * 3, 0.0f, fieldDepth * 3), new Vector2f(1.0f, 1.0f))
     };
 
-    int indices[] = {0, 1, 2,
+    int indices[] = {0, 1, 2, 
       2, 1, 3};
 
+    Vertex[] vertices2 = new Vertex[]{new Vertex(new Vector3f(-fieldWidth / 10, 0.0f, -fieldDepth / 10), new Vector2f(0.0f, 0.0f)),
+      new Vertex(new Vector3f(-fieldWidth / 10, 0.0f, fieldDepth / 10 * 3), new Vector2f(0.0f, 1.0f)),
+      new Vertex(new Vector3f(fieldWidth / 10 * 3, 0.0f, -fieldDepth / 10), new Vector2f(1.0f, 0.0f)),
+      new Vertex(new Vector3f(fieldWidth / 10 * 3, 0.0f, fieldDepth / 10 * 3), new Vector2f(1.0f, 1.0f))
+    };
+    
+    int indices2[] = { 0, 1, 2,
+      2, 1, 3 };
+    
+    Mesh mesh2 = new Mesh(vertices2, indices2, true);
+    
     Mesh mesh = new Mesh(vertices, indices, true);
     // the 1 and 8 are specular intensity and exponent, respectively
     Material material = new Material(new Texture("test.png"), new Vector3f(1, 1, 1), 1, 8);
@@ -90,6 +101,17 @@ public class TestGame extends Game {
     
     getRootObject().addChild(new GameObject().addComponent(new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f)));
 
+    // Test Code from episode #46
+    GameObject testMesh1 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
+    GameObject testMesh2 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
+    
+    testMesh1.getTransform().getPosition().setVector3f(0, 2, 0);
+    testMesh2.getTransform().getPosition().setVector3f(0, 0, 5);
+    
+    testMesh1.addChild(testMesh2);
+    
+    getRootObject().addChild(testMesh1);
+    
   }
 
 }
