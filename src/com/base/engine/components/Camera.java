@@ -95,12 +95,11 @@ public class Camera extends GameComponent {
 
       if (rotateY) {
         getTransform().setRotation(getTransform().getRotation().multiplyQuaternion(
-                new Quaternion().initializeRotation( yAxis,
-                        (float) Math.toRadians(deltaPosition.getX() * sensitivity ) ) ).normalize() );
+                new Quaternion(yAxis, (float) Math.toRadians(deltaPosition.getX() * sensitivity ) ) ).normalize() );
       }
       if (rotateX) {
         getTransform().setRotation(getTransform().getRotation().multiplyQuaternion(
-                new Quaternion().initializeRotation( getTransform().getRotation().getRight(),
+                new Quaternion(getTransform().getRotation().getRight(),
                         ( (float) Math.toRadians(-deltaPosition.getY() * sensitivity ) ) ) ).normalize() );
       }
 

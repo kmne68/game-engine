@@ -154,12 +154,22 @@ public class Vector3f {
     return new Vector2f(x, z);
   }
   
-  public void setVector3f(float x, float y, float z) {
+  public Vector3f setVector3f(float x, float y, float z) {
     
     this.x = x;
     this.y = y;
     this.z = z;
     
+    return this;
+    
+  }
+  
+  
+  public Vector3f set(Vector3f r) { 
+    
+    setVector3f(r.getX(), r.getY(), r.getZ());
+    
+    return this;
   }
   
   public float getX() {

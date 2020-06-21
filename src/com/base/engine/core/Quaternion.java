@@ -16,12 +16,15 @@ public class Quaternion {
   private float z;
   private float w;
 
-  public Quaternion() {
-
-    this(0, 0, 0, 1);
+  
+  public Quaternion(float x, float y, float z, float w) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.w = w;
   }
 
-  public Quaternion initializeRotation(Vector3f axis, float angle) {
+  public Quaternion(Vector3f axis, float angle) {
 
     float sinHalfAngle = (float) Math.sin((angle / 2));
     float cosHalfAngle = (float) Math.cos((angle / 2));
@@ -31,16 +34,8 @@ public class Quaternion {
     this.z = axis.getZ() * sinHalfAngle;
     this.w = 1 * cosHalfAngle;
 
-    return this;
-    
   }
-
-  public Quaternion(float x, float y, float z, float w) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.w = w;
-  }
+  
 
   public float length() {
     return (float) Math.sqrt(x * x + y * y + z * z + w * w);
@@ -55,6 +50,13 @@ public class Quaternion {
   public Quaternion conjugate() {
     return new Quaternion(-x, -y, -z, w);
   }
+  
+  
+  public boolean equals(Quaternion r) {
+    
+    return x == r.getX() && y == r.getY() && z == r.getZ() && w == r.getW();
+  }
+  
 
   public Quaternion multiplyQuaternion(Quaternion r) {
     float w_ = w * r.getW() - x * r.getX() - y * r.getY() - z * r.getZ();
@@ -108,6 +110,27 @@ public class Quaternion {
 
     return new Vector3f(-(1.0f - 2.0f * (y * y + z * z)), -2.0f * (x * y - w * z), -2.0f * (x * z + w * y));
   }
+  
+  
+  public Quaternion setVector3f(float x, float y, float z, float w) {
+    
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.w = w;
+    
+    return this;
+    
+  }
+  
+  
+  public Quaternion set(Quaternion r) { 
+    
+    setVector3f(r.getX(), r.getY(), r.getZ(), r.getW());
+    
+    return this;
+  }  
+  
 
   public float getX() {
     return x;

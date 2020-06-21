@@ -12,18 +12,55 @@ import com.base.engine.components.Camera;
  * @author kmne6
  */
 public class Transform {
-  
+
   private Transform parent;
+  private Matrix4f parentMatrix;
 
   private Vector3f position;
-  private Vector3f scale;
   private Quaternion rotation;
+  private Vector3f scale;
+
+  // variables to track prior attribute values
+  private Vector3f oldPosition;
+  private Quaternion oldRotation;
+  private Vector3f oldScale;
 
   public Transform() {
 
     position = new Vector3f(0, 0, 0);
-    scale = new Vector3f(1, 1, 1);
     rotation = new Quaternion(0, 0, 0, 1);
+    scale = new Vector3f(1, 1, 1);
+
+    parentMatrix = new Matrix4f().initializeIdentity();
+
+  }
+
+  public boolean hasChanged() {
+    
+    if(oldPosition == null) {
+      oldPosition = new Vector3f(0, 0, 0).set(position);
+      oldRotation = new Quaternion(0, 0, 0, 0).set(rotation);
+      oldScale = new Vector3f(0, 0, 0).set(scale);
+      
+      return true;
+    }
+    
+        
+    if(parent != null && parent.hasChanged() )
+        return true;
+
+    if (!position.equals(oldPosition)) {
+      return true;
+    }
+    if (!rotation.equals(oldRotation)) {
+      return true;
+    }
+    if (!scale.equals(oldScale)) {
+      return true;
+    }
+
+    return false;
+
   }
 
   public Matrix4f getTransformation() {
@@ -32,29 +69,29 @@ public class Transform {
             position.getZ());
     Matrix4f rotationMatrix = rotation.toRotationMatrix();
     Matrix4f scaleMatrix = new Matrix4f().initializeScale(scale.getX(), scale.getY(), scale.getZ());
-    
-    Matrix4f parentMatrix;
-    
-    if(parent != null) {
-      
+
+    if (parent != null && parent.hasChanged() ) {
+
       parentMatrix = parent.getTransformation();
-      
-    } else {
-      
-      parentMatrix = new Matrix4f().initializeIdentity();
+    }
+    
+    if (oldPosition != null) {
+    
+      oldPosition.set(position);
+      oldRotation.set(rotation);
+      oldScale.set(scale);
     }
 
     // Apply scale transformation first
     return parentMatrix.multiplyMatrix(translationMatrix.multiplyMatrix(rotationMatrix.multiplyMatrix(scaleMatrix)));
-    
+
   }
-  
+
   
   public void setParent(Transform parent) {
-    
+
     this.parent = parent;
   }
-  
 
   public Vector3f getPosition() {
     return position;
