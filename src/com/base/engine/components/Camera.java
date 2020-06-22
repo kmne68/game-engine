@@ -29,10 +29,11 @@ public class Camera extends GameComponent {
   
   public Matrix4f getViewProjection() {
 
-    Matrix4f cameraRotation = getTransform().getRotation().toRotationMatrix();
-    Matrix4f cameraTranslation = new Matrix4f().initializeTranslation(-getTransform().getPosition().getX(),
-                                    -getTransform().getPosition().getY(),
-                                    -getTransform().getPosition().getZ());
+    Matrix4f cameraRotation = getTransform().getTransformRotation().toRotationMatrix();
+    Vector3f cameraPosition = getTransform().getTransformPosition().multiply(-1);
+    Matrix4f cameraTranslation = new Matrix4f().initializeTranslation(cameraPosition.getX(),
+                                                                      cameraPosition.getY(),
+                                                                      cameraPosition.getZ());
 
     return projection.multiplyMatrix(cameraRotation.multiplyMatrix(cameraTranslation));
   }
@@ -47,8 +48,7 @@ public class Camera extends GameComponent {
 
   boolean mouseLocked = false;
 
-  Vector2f centerPosition = new Vector2f(
-          Window.getWidth() / 2, Window.getHeight() / 2);
+  Vector2f centerPosition = new Vector2f( Window.getWidth() / 2, Window.getHeight() / 2 );
 
   
   public void move(Vector3f direction, float amount) {
