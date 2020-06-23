@@ -6,6 +6,7 @@
 package com.base.engine.core;
 
 import com.base.engine.components.Camera;
+import static com.base.engine.components.Camera.yAxis;
 
 /**
  *
@@ -32,18 +33,31 @@ public class Transform {
     scale = new Vector3f(1, 1, 1);
 
     parentMatrix = new Matrix4f().initializeIdentity();
-
   }
+  
+  
+  public void update() {
+    
+    if (oldPosition != null) {
+      oldPosition.set(position);
+      oldRotation.set(rotation);
+      oldScale.set(scale);
+    }
+    else {
+      oldPosition = new Vector3f(0, 0, 0).set(position).add(1.0f);
+      oldRotation = new Quaternion(0, 0, 0, 0).set(rotation).multiplyQuaternion(0.5f);
+      oldScale = new Vector3f(0, 0, 0).set(scale).add(1.0f);
+    }    
+  }
+  
+  
+  public void rotate(Vector3f axis, float angle) {
+    
+    rotation = new Quaternion(axis, angle).multiplyQuaternion(rotation).normalize();    
+  }
+  
 
   public boolean hasChanged() {
-
-    if (oldPosition == null) {
-      oldPosition = new Vector3f(0, 0, 0).set(position);
-      oldRotation = new Quaternion(0, 0, 0, 0).set(rotation);
-      oldScale = new Vector3f(0, 0, 0).set(scale);
-
-      return true;
-    }
 
     if (parent != null && parent.hasChanged()) {
       return true;
@@ -70,13 +84,6 @@ public class Transform {
                                                                       position.getZ());
     Matrix4f rotationMatrix = rotation.toRotationMatrix();
     Matrix4f scaleMatrix = new Matrix4f().initializeScale(scale.getX(), scale.getY(), scale.getZ());
-
-    if (oldPosition != null) {
-
-      oldPosition.set(position);
-      oldRotation.set(rotation);
-      oldScale.set(scale);
-    }
 
     // Apply scale transformation first
     return getParentMatrix().multiplyMatrix(translationMatrix.multiplyMatrix(rotationMatrix.multiplyMatrix(scaleMatrix)));

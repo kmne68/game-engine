@@ -50,6 +50,8 @@ public class GameObject {
   
   public void input(float delta) {
     
+    transform.update();
+    
     for(GameComponent component : components)
       component.input(delta);
     

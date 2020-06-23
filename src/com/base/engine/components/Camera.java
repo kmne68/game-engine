@@ -93,14 +93,12 @@ public class Camera extends GameComponent {
       boolean rotateY = deltaPosition.getX() != 0;
       boolean rotateX = deltaPosition.getY() != 0;
 
-      if (rotateY) {
-        getTransform().setRotation(getTransform().getRotation().multiplyQuaternion(
-                new Quaternion(yAxis, (float) Math.toRadians(deltaPosition.getX() * sensitivity ) ) ).normalize() );
-      }
+      if (rotateY)
+        getTransform().rotate(yAxis, (float) Math.toRadians( deltaPosition.getX() * sensitivity ) );
+      
       if (rotateX) {
-        getTransform().setRotation(getTransform().getRotation().multiplyQuaternion(
-                new Quaternion(getTransform().getRotation().getRight(),
-                        ( (float) Math.toRadians(-deltaPosition.getY() * sensitivity ) ) ) ).normalize() );
+        getTransform().rotate(getTransform().getTransformRotation().getRight(),
+                        ( (float) Math.toRadians(-deltaPosition.getY() * sensitivity ) ) );
       }
 
       if (rotateY || rotateX) {
