@@ -29,7 +29,7 @@ public class Camera extends GameComponent {
   
   public Matrix4f getViewProjection() {
 
-    Matrix4f cameraRotation = getTransform().getTransformRotation().toRotationMatrix();
+    Matrix4f cameraRotation = getTransform().getTransformRotation().conjugate().toRotationMatrix();
     Vector3f cameraPosition = getTransform().getTransformPosition().multiply(-1);
     Matrix4f cameraTranslation = new Matrix4f().initializeTranslation(cameraPosition.getX(),
                                                                       cameraPosition.getY(),
@@ -59,7 +59,7 @@ public class Camera extends GameComponent {
   
   @Override
   public void input(float delta) {
-    float sensitivity = -0.5f;
+    float sensitivity = 0.5f;
     float moveAmount = (float) (10 * delta);
     //     float rotationAmount = (float)(100 * Time.getDelta());
 
@@ -97,7 +97,7 @@ public class Camera extends GameComponent {
         getTransform().rotate(yAxis, (float) Math.toRadians( deltaPosition.getX() * sensitivity ) );
       
       if (rotateX) {
-        getTransform().rotate(getTransform().getTransformRotation().getRight(),
+        getTransform().rotate(getTransform().getRotation().getRight(),
                         ( (float) Math.toRadians(-deltaPosition.getY() * sensitivity ) ) );
       }
 

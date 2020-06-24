@@ -88,7 +88,7 @@ public class TestGame extends Game {
     spotLightObject.addComponent(spotLight);
     
     spotLightObject.getTransform().getPosition().setVector3f(5, 0, 5);
-    spotLightObject.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float) Math.toRadians(-90.0f)));
+    spotLightObject.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float) Math.toRadians(90.0f)));
 
 //    GameObject pointLightObject = new GameObject();
 //    PointLight pointLight = new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);
@@ -112,12 +112,12 @@ public class TestGame extends Game {
     testMesh2.getTransform().getPosition().setVector3f(0, 0, 5);
     
     testMesh1.addChild(testMesh2);
-    //testMesh2
-    getRootObject().addChild(new GameObject().addComponent(new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f)));
+    testMesh2.addChild(new GameObject().addComponent(new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f)));
+    // getRootObject().addChild(new GameObject().addComponent(new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f)));
     
     getRootObject().addChild(testMesh1);
     
-    directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), (float) Math.toRadians(45)));
+    directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), (float) Math.toRadians(-45)));
   }
 
 }

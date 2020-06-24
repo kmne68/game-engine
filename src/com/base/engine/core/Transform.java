@@ -45,7 +45,7 @@ public class Transform {
     }
     else {
       oldPosition = new Vector3f(0, 0, 0).set(position).add(1.0f);
-      oldRotation = new Quaternion(0, 0, 0, 0).set(rotation).multiplyQuaternion(0.5f);
+      oldRotation = new Quaternion(0, 0, 0, 0).set(rotation).multiplyFloat(0.5f);
       oldScale = new Vector3f(0, 0, 0).set(scale).add(1.0f);
     }    
   }
