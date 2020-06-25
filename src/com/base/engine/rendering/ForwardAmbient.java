@@ -43,7 +43,7 @@ public class ForwardAmbient extends Shader {
     
     Matrix4f worldMatrix = transform.getTransformation();
     Matrix4f projectedMatrix = getRenderingEngine().getMainCamera().getViewProjection().multiplyMatrix(worldMatrix);
-    material.getTexture().bind();
+    material.getTexture("diffuse").bind();
 
     setUniform("MVP", projectedMatrix);
     setUniform("ambientIntensity", getRenderingEngine().getAmbientLight());

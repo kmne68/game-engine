@@ -61,13 +61,13 @@ public class ForwardSpot extends Shader {
 
     Matrix4f worldMatrix = transform.getTransformation();
     Matrix4f projectedMatrix = getRenderingEngine().getMainCamera().getViewProjection().multiplyMatrix(worldMatrix);
-    material.getTexture().bind();
+    material.getTexture("diffuse").bind();
 
     setUniform("model", worldMatrix);
     setUniform("MVP", projectedMatrix);
 
-    setUniformf("specularIntensity", material.getSpecularIntensity());
-    setUniformf("specularPower", material.getSpecularPower());
+    setUniformf("specularIntensity", material.getFloat("specularIntensity"));
+    setUniformf("specularPower", material.getFloat("specularPower"));
 
     setUniform("eyePosition", getRenderingEngine().getMainCamera().getTransform().getTransformPosition());
     setUniformSpotLight("spotLight", (SpotLight) getRenderingEngine().getActiveLight());
