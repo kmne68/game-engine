@@ -5,6 +5,8 @@
  */
 package com.base.engine.core;
 
+import com.base.engine.rendering.RenderingEngine;
+
 /**
  *
  * @author kmne6
@@ -25,9 +27,23 @@ public abstract class Game {
   public void update(float delta) {
   
     getRootObject().update(delta);
-  }  
+  }
   
-  public GameObject getRootObject() {
+  
+  public void render(RenderingEngine renderingEngine) {
+    
+    renderingEngine.render(getRootObject());
+  }
+  
+  
+  public void addObject(GameObject gameObject) {
+    
+    getRootObject().addChild(gameObject);
+  }
+  
+  // PRIVATE METHODS
+  
+  private GameObject getRootObject() {
     
     if(root == null)
       root = new GameObject();

@@ -31,7 +31,12 @@ public class Material {
   }
 
   public Texture getTexture(String name) {
-    return textureHashMap.get(name);
+    
+    Texture result = textureHashMap.get(name);
+    if(result != null)
+      return result;
+    else
+      return new Texture("test.png");
   }
 
   public void addTexture(String name, Texture texture) {
@@ -39,9 +44,14 @@ public class Material {
   }
 
   
-  
   public Vector3f getVector3f(String name) {
-    return vector3fHashMap.get(name);
+    
+    Vector3f result = vector3fHashMap.get(name);
+    if(result != null)
+      return result;
+    else
+      return new Vector3f(0, 0, 0);
+    
   }
 
   public void addVector3f(String name, Vector3f vector3f) {
@@ -50,7 +60,12 @@ public class Material {
 
   
   public float getFloat(String name) {
-    return floatHashMap.get(name);
+    
+    Float result = floatHashMap.get(name);
+    if(result != null)
+      return result;
+    else
+      return 0;
   }
 
   public void addFloat(String name, float floatValue) {

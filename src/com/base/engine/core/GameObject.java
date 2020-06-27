@@ -71,13 +71,13 @@ public class GameObject {
   }
   
   
-  public void render(Shader shader) {
+  public void render(Shader shader, RenderingEngine renderingEngine) {
         
     for(GameComponent component : components)
-      component.render(shader);
+      component.render(shader, renderingEngine);
     
     for(GameObject child : children)
-      child.render(shader);
+      child.render(shader, renderingEngine);
     
   }
   
