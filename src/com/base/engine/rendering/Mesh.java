@@ -7,6 +7,7 @@ package com.base.engine.rendering;
 
 import com.base.engine.core.BufferUtil;
 import com.base.engine.core.Vector3f;
+import com.base.engine.rendering.meshloader.OBJModel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -122,6 +123,8 @@ public class Mesh {
     {
         String[] splitArray = fileName.split("\\.");
         String ext = splitArray[splitArray.length -1];
+        
+        OBJModel monkeyTest = new OBJModel("./res/models/" + fileName);
         
         if(!ext.equals("obj"))
         {

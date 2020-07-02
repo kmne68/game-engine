@@ -58,6 +58,8 @@ public class TestGame extends Game {
     material.addTexture("diffuse", new Texture("test.png"));
     material.addFloat("specularIntensity", 1);
     material.addFloat("specularPower", 8);
+    
+    Mesh monkeyMesh = new Mesh("engine_monkey.obj");
 
     MeshRenderer meshRenderer = new MeshRenderer(mesh, material);
 

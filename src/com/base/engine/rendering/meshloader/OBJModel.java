@@ -8,7 +8,6 @@ package com.base.engine.rendering.meshloader;
 import com.base.engine.core.BufferUtil;
 import com.base.engine.core.Vector2f;
 import com.base.engine.core.Vector3f;
-import com.base.engine.rendering.Vertex;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -18,80 +17,65 @@ import java.util.ArrayList;
  * @author kmne6
  */
 public class OBJModel {
-  
+
   private ArrayList<Vector3f> positions;
   private ArrayList<Vector2f> textureCoordinates;
   private ArrayList<Vector3f> normals;
-  private ArrayList<OBJIndex>  indices;
-  
-  
+  private ArrayList<OBJIndex> indices;
+
+  private boolean hasTextureCoordinates;
+  private boolean hasNormals;
+
   public OBJModel(String fileName) {
-    
+
     positions = new ArrayList<Vector3f>();
     textureCoordinates = new ArrayList<Vector2f>();
     normals = new ArrayList<Vector3f>();
-    indices = new ArrayList<OBJIndex>();   
-    
-            BufferedReader meshReader = null;
-        
-        try
-        {
-            meshReader = new BufferedReader(new FileReader("./res/models/" + fileName));
-            String line;
-            
-            while((line = meshReader.readLine()) != null)
-            {
-                String[] tokens = line.split(" ");
-                tokens = BufferUtil.removeEmptyStrings(tokens);
-                
-                if(tokens.length == 0 || tokens[0].equals("#"))
-                    continue;
-                else if(tokens[0].equals("v"))
-                {
-                    positions.add(new Vector3f(Float.valueOf(tokens[1]),
-                                                        Float.valueOf(tokens[2]),
-                                                        Float.valueOf(tokens[3])));
-                }
-                else if( tokens[0].equals( "vt" ) ) {
-                  
-                    textureCoordinates.add(new Vector2f(Float.valueOf(tokens[1]),
-                                                        Float.valueOf(tokens[2])));
-                }
-//                else if(tokens[0].equals("f")) 
-//                {
-//                    indices.add(Integer.parseInt(tokens[1].split("/")[0]) - 1);
-//                    indices.add(Integer.parseInt(tokens[2].split("/")[0]) - 1);
-//                    indices.add(Integer.parseInt(tokens[3].split("/")[0]) - 1);
-//                    
-//                    if(tokens.length > 4)
-//                    {
-//                        indices.add(Integer.parseInt(tokens[1].split("/")[0]) - 1);
-//                        indices.add(Integer.parseInt(tokens[3].split("/")[0]) - 1);
-//                        indices.add(Integer.parseInt(tokens[4].split("/")[0]) - 1);
-//                    }
-//                }
-            }
-            
-            meshReader.close();
-            
-            Vertex[] vertexData = new Vertex[vertices.size()];
-            vertices.toArray(vertexData);
-            
-            Integer[] indexData = new Integer[indices.size()];
-            indices.toArray(indexData);
-            
-            addVertices(vertexData, BufferUtil.toIntArray(indexData), true);
+    indices = new ArrayList<OBJIndex>();
+    hasTextureCoordinates = false;
+    hasNormals = false;
 
+    BufferedReader meshReader = null;
+
+    try {
+      meshReader = new BufferedReader(new FileReader(fileName));
+      String line;
+
+      while ((line = meshReader.readLine()) != null) {
+        String[] tokens = line.split(" ");
+        tokens = BufferUtil.removeEmptyStrings(tokens);
+
+        if (tokens.length == 0 || tokens[0].equals("#")) {
+          continue;
+        } else if (tokens[0].equals("v")) {   // v = vertex
+          positions.add(new Vector3f(Float.valueOf(tokens[1]),
+                  Float.valueOf(tokens[2]),
+                  Float.valueOf(tokens[3])));
+        } else if (tokens[0].equals("vt")) {  // vt = vertex texture?
+
+          textureCoordinates.add(new Vector2f(Float.valueOf(tokens[1]),
+                  Float.valueOf(tokens[2])));
+        } else if (tokens[0].equals("vn")) {  // vn = vertext normal
+          normals.add(new Vector3f(Float.valueOf(tokens[1]),
+                  Float.valueOf(tokens[2]),
+                  Float.valueOf(tokens[3])));
+        } else if (tokens[0].equals("f")) // f = face
+        {
+          for(int i = 0; i < tokens.length - 3; i++ )
+          {
+            indices.add(parseOBJIndex(tokens[1]));
+            indices.add(parseOBJIndex(tokens[2 + i]));
+            indices.add(parseOBJIndex(tokens[3 + i]));
+          }
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            System.exit(1);
-        }        
+      }
 
-        return null;
+      meshReader.close();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
     }
-    
   }
 
   public ArrayList<Vector3f> getPositions() {
@@ -109,5 +93,29 @@ public class OBJModel {
   public ArrayList<OBJIndex> getIndices() {
     return indices;
   }
-  
+
+  /**
+   * PRIVATE METHODS
+   */
+  private OBJIndex parseOBJIndex(String token) {
+
+    String[] values = token.split("/");
+
+    OBJIndex result = new OBJIndex();
+    result.vertexIndex = Integer.parseInt(values[0]) - 1;
+
+    if (values.length > 1) {
+      hasTextureCoordinates = true;
+      result.textureCoordinateIndex = Integer.parseInt(values[1]) - 1;
+
+      if (values.length > 2) {
+        hasNormals = true;
+        result.normalIndex = Integer.parseInt(values[2]) - 1;
+      }
+    }
+
+    return result;
+
+  }
+
 }
