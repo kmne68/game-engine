@@ -59,7 +59,7 @@ public class TestGame extends Game {
     material.addFloat("specularIntensity", 1);
     material.addFloat("specularPower", 8);
     
-    Mesh monkeyMesh = new Mesh("engine_monkey.obj");
+    Mesh monkeyMesh = new Mesh("engine_monkey.obj");    // Benny calls this "tempMesh"
 
     MeshRenderer meshRenderer = new MeshRenderer(mesh, material);
 
@@ -109,6 +109,7 @@ public class TestGame extends Game {
     // Test Code from episode #46
     GameObject testMesh1 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
     GameObject testMesh2 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
+    GameObject testMesh3 = new GameObject().addComponent(new MeshRenderer(monkeyMesh, material));
     
     testMesh1.getTransform().getPosition().setVector3f(0, 2, 0);
     testMesh1.getTransform().setRotation( new Quaternion( new Vector3f( 0, 1, 0 ), 0.4f ) );
@@ -121,6 +122,7 @@ public class TestGame extends Game {
     // getRootObject().addChild(new GameObject().addComponent(new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f)));
     
     addObject(testMesh1);
+    addObject(testMesh3);
     
     directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), (float) Math.toRadians(-45)));
   }

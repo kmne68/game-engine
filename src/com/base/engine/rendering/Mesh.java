@@ -7,6 +7,7 @@ package com.base.engine.rendering;
 
 import com.base.engine.core.BufferUtil;
 import com.base.engine.core.Vector3f;
+import com.base.engine.rendering.meshloader.IndexedModel;
 import com.base.engine.rendering.meshloader.OBJModel;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -122,9 +123,7 @@ public class Mesh {
     private Mesh loadMesh(String fileName)
     {
         String[] splitArray = fileName.split("\\.");
-        String ext = splitArray[splitArray.length -1];
-        
-        OBJModel monkeyTest = new OBJModel("./res/models/" + fileName);
+        String ext = splitArray[splitArray.length -1];        
         
         if(!ext.equals("obj"))
         {
@@ -133,60 +132,81 @@ public class Mesh {
             System.exit(1);
         }
         
+        OBJModel monkeyTest = new OBJModel("./res/models/" + fileName);
+        IndexedModel model = monkeyTest.toIndexedModel();
+        
         ArrayList<Vertex> vertices = new ArrayList<Vertex>();
-        ArrayList<Integer> indices = new ArrayList<Integer>();
         
-        BufferedReader meshReader = null;
-        
-        try
-        {
-            meshReader = new BufferedReader(new FileReader("./res/models/" + fileName));
-            String line;
-            
-            while((line = meshReader.readLine()) != null)
-            {
-                String[] tokens = line.split(" ");
-                tokens = BufferUtil.removeEmptyStrings(tokens);
-                
-                if(tokens.length == 0 || tokens[0].equals("#"))
-                    continue;
-                else if(tokens[0].equals("v"))
-                {
-                    vertices.add(new Vertex(new Vector3f(Float.valueOf(tokens[1]),
-                                                        Float.valueOf(tokens[2]),
-                                                        Float.valueOf(tokens[3]))));
-                }
-                else if(tokens[0].equals("f")) 
-                {
-                    indices.add(Integer.parseInt(tokens[1].split("/")[0]) - 1);
-                    indices.add(Integer.parseInt(tokens[2].split("/")[0]) - 1);
-                    indices.add(Integer.parseInt(tokens[3].split("/")[0]) - 1);
-                    
-                    if(tokens.length > 4)
-                    {
-                        indices.add(Integer.parseInt(tokens[1].split("/")[0]) - 1);
-                        indices.add(Integer.parseInt(tokens[3].split("/")[0]) - 1);
-                        indices.add(Integer.parseInt(tokens[4].split("/")[0]) - 1);
-                    }
-                }
-            }
-            
-            meshReader.close();
-            
-            Vertex[] vertexData = new Vertex[vertices.size()];
-            vertices.toArray(vertexData);
-            
-            Integer[] indexData = new Integer[indices.size()];
-            indices.toArray(indexData);
-            
-            addVertices(vertexData, BufferUtil.toIntArray(indexData), true);
-
+        for(int i = 0; i < model.getPositions().size(); i++) {
+          
+          vertices.add(new Vertex(model.getPositions().get(i),
+            model.getTextureCoordinates().get(i),
+            model.getNormals().get(i)));
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            System.exit(1);
-        }        
+          
+      Vertex[] vertexData = new Vertex[vertices.size()];
+      vertices.toArray(vertexData);
+
+      Integer[] indexData = new Integer[model.getIndices().size()];
+      model.getIndices().toArray(indexData);
+      
+      addVertices(vertexData, BufferUtil.toIntArray(indexData), true );
+        
+        
+//        ArrayList<Vertex> vertices = new ArrayList<Vertex>();
+//        ArrayList<Integer> indices = new ArrayList<Integer>();
+//        
+//        BufferedReader meshReader = null;
+//        
+//        try
+//        {
+//            meshReader = new BufferedReader(new FileReader("./res/models/" + fileName));
+//            String line;
+//            
+//            while((line = meshReader.readLine()) != null)
+//            {
+//                String[] tokens = line.split(" ");
+//                tokens = BufferUtil.removeEmptyStrings(tokens);
+//                
+//                if(tokens.length == 0 || tokens[0].equals("#"))
+//                    continue;
+//                else if(tokens[0].equals("v"))
+//                {
+//                    vertices.add(new Vertex(new Vector3f(Float.valueOf(tokens[1]),
+//                                                        Float.valueOf(tokens[2]),
+//                                                        Float.valueOf(tokens[3]))));
+//                }
+//                else if(tokens[0].equals("f")) 
+//                {
+//                    indices.add(Integer.parseInt(tokens[1].split("/")[0]) - 1);
+//                    indices.add(Integer.parseInt(tokens[2].split("/")[0]) - 1);
+//                    indices.add(Integer.parseInt(tokens[3].split("/")[0]) - 1);
+//                    
+//                    if(tokens.length > 4)
+//                    {
+//                        indices.add(Integer.parseInt(tokens[1].split("/")[0]) - 1);
+//                        indices.add(Integer.parseInt(tokens[3].split("/")[0]) - 1);
+//                        indices.add(Integer.parseInt(tokens[4].split("/")[0]) - 1);
+//                    }
+//                }
+//            }
+//            
+//            meshReader.close();
+//            
+//            Vertex[] vertexData = new Vertex[vertices.size()];
+//            vertices.toArray(vertexData);
+//            
+//            Integer[] indexData = new Integer[indices.size()];
+//            indices.toArray(indexData);
+//            
+//            addVertices(vertexData, BufferUtil.toIntArray(indexData), true);
+//
+//        }
+//        catch(Exception e)
+//        {
+//            e.printStackTrace();
+//            System.exit(1);
+//        }        
 
         return null;
     }

@@ -78,20 +78,51 @@ public class OBJModel {
     }
   }
 
-  public ArrayList<Vector3f> getPositions() {
-    return positions;
-  }
-
-  public ArrayList<Vector2f> getTextureCoordinates() {
-    return textureCoordinates;
-  }
-
-  public ArrayList<Vector3f> getNormals() {
-    return normals;
-  }
-
-  public ArrayList<OBJIndex> getIndices() {
-    return indices;
+//  public ArrayList<Vector3f> getPositions() {
+//    return positions;
+//  }
+//
+//  public ArrayList<Vector2f> getTextureCoordinates() {
+//    return textureCoordinates;
+//  }
+//
+//  public ArrayList<Vector3f> getNormals() {
+//    return normals;
+//  }
+//
+//  public ArrayList<OBJIndex> getIndices() {
+//    return indices;
+//  }
+  
+  public IndexedModel toIndexedModel() {
+    
+    IndexedModel result = new IndexedModel();
+    
+    for(int i = 0; i < indices.size(); i++) {
+      OBJIndex currentIndex = indices.get(i);
+      
+      Vector3f currentPosition = positions.get(currentIndex.vertexIndex);
+      Vector2f currentTextureCoordinate;
+      Vector3f currentNormal;
+      
+      if(hasTextureCoordinates)
+        currentTextureCoordinate = textureCoordinates.get(currentIndex.textureCoordinateIndex);
+      else
+        currentTextureCoordinate = new Vector2f(0, 0);
+      
+      if(hasNormals)
+        currentNormal = normals.get(currentIndex.normalIndex);
+      else
+        currentNormal = new Vector3f(0, 0, 0);
+      
+      result.getPositions().add(currentPosition);
+      result.getTextureCoordinates().add(currentTextureCoordinate);
+      result.getNormals().add(currentNormal);
+      result.getIndices().add(i);
+    }
+    
+    return result;
+    
   }
 
   /**
