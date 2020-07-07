@@ -134,6 +134,7 @@ public class Mesh {
         
         OBJModel monkeyTest = new OBJModel("./res/models/" + fileName);
         IndexedModel model = monkeyTest.toIndexedModel();
+        model.calculateNormals();
         
         ArrayList<Vertex> vertices = new ArrayList<Vertex>();
         
@@ -150,7 +151,7 @@ public class Mesh {
       Integer[] indexData = new Integer[model.getIndices().size()];
       model.getIndices().toArray(indexData);
       
-      addVertices(vertexData, BufferUtil.toIntArray(indexData), true );
+      addVertices(vertexData, BufferUtil.toIntArray(indexData), false );
         
         
 //        ArrayList<Vertex> vertices = new ArrayList<Vertex>();
