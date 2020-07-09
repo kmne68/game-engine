@@ -47,7 +47,7 @@ public class IndexedModel {
       normals.get(i2).set(normals.get(i2).add(normal));
     }
 
-    for (int i = 0; i < positions.size(); i++) {
+    for (int i = 0; i < normals.size(); i++) {
 
       normals.get(i).set(normals.get(i).normalize());
     }

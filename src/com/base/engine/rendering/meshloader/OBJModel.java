@@ -127,7 +127,7 @@ public class OBJModel {
         
         if(currentIndex.vertexIndex == oldIndex.vertexIndex &&
                 currentIndex.textureCoordinateIndex == oldIndex.textureCoordinateIndex &&
-                currentIndex.normalIndex == oldIndex.normalIndex);
+                currentIndex.normalIndex == oldIndex.normalIndex)
         {
           previousVertexIndex = j;
           break;
