@@ -98,7 +98,7 @@ public class OBJModel {
   public IndexedModel toIndexedModel() {
     
     IndexedModel result = new IndexedModel();
-    HashMap<Integer, Integer> indexMap = new HashMap<Integer, Integer>();
+    HashMap<OBJIndex, Integer> indexMap = new HashMap<OBJIndex, Integer>();
     
     int currentVertexIndex = 0;
     
@@ -121,22 +121,14 @@ public class OBJModel {
       
       int previousVertexIndex = -1;
       
-      for(int j = 0; j < i; j++) {
-        
-        OBJIndex oldIndex = indices.get(j);
-        
-        if(currentIndex.vertexIndex == oldIndex.vertexIndex &&
-                currentIndex.textureCoordinateIndex == oldIndex.textureCoordinateIndex &&
-                currentIndex.normalIndex == oldIndex.normalIndex)
-        {
-          previousVertexIndex = j;
-          break;
-        }
-      }
+      Integer indexTest = indexMap.get(currentIndex);
+      
+      if(indexTest != null)
+        previousVertexIndex = indexTest;
       
       if(previousVertexIndex == -1) {
         
-        indexMap.put(i, currentVertexIndex);
+        indexMap.put(currentIndex, currentVertexIndex);
         
         result.getPositions().add(currentPosition);
         result.getTextureCoordinates().add(currentTextureCoordinate);
@@ -145,7 +137,7 @@ public class OBJModel {
         currentVertexIndex++;
       }
       else {
-        result.getIndices().add(indexMap.get(previousVertexIndex));
+        result.getIndices().add(previousVertexIndex);
       }
     }
     
