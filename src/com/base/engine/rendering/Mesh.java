@@ -9,6 +9,7 @@ import com.base.engine.core.BufferUtil;
 import com.base.engine.core.Vector3f;
 import com.base.engine.rendering.meshloader.IndexedModel;
 import com.base.engine.rendering.meshloader.OBJModel;
+import com.base.engine.rendering.resourcemanagement.MeshResource;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -22,8 +23,7 @@ import static org.lwjgl.opengl.GL20.*;
  */
 public class Mesh {
     
-    private int vbo;    // A pointer (handle)
-    private int ibo;    // Described as an array of integers on the graphics card
+    private MeshResource buffers;
     private int size;   // How much space vbo points to
     
     
@@ -48,8 +48,7 @@ public class Mesh {
     
     private void initMeshData() {
       
-        vbo = glGenBuffers();
-        ibo = glGenBuffers();
+        buffers = new MeshResource();
         size = 0;      
     }
 
@@ -63,10 +62,10 @@ public class Mesh {
       
         size = indices.length; // * Vertex.SIZE;
         
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers.getVbo());
         glBufferData(GL_ARRAY_BUFFER, BufferUtil.createFlippedBuffer(vertices), GL_STATIC_DRAW);
         
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.getIbo());
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, BufferUtil.createFlippedBuffer(indices), GL_STATIC_DRAW);
     }    
     
@@ -76,7 +75,7 @@ public class Mesh {
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
         
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers.getVbo());
         glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0); 
         
         // The final parameter (12) is how many bytes into the memory location
@@ -87,7 +86,7 @@ public class Mesh {
         // Not used after as of installment #15
         // glDrawArrays(GL_TRIANGLES, 0, size);
         
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers.getIbo());
         glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
         
         glDisableVertexAttribArray(0);
@@ -151,63 +150,7 @@ public class Mesh {
       Integer[] indexData = new Integer[model.getIndices().size()];
       model.getIndices().toArray(indexData);
       
-      addVertices(vertexData, BufferUtil.toIntArray(indexData), false );
-        
-        
-//        ArrayList<Vertex> vertices = new ArrayList<Vertex>();
-//        ArrayList<Integer> indices = new ArrayList<Integer>();
-//        
-//        BufferedReader meshReader = null;
-//        
-//        try
-//        {
-//            meshReader = new BufferedReader(new FileReader("./res/models/" + fileName));
-//            String line;
-//            
-//            while((line = meshReader.readLine()) != null)
-//            {
-//                String[] tokens = line.split(" ");
-//                tokens = BufferUtil.removeEmptyStrings(tokens);
-//                
-//                if(tokens.length == 0 || tokens[0].equals("#"))
-//                    continue;
-//                else if(tokens[0].equals("v"))
-//                {
-//                    vertices.add(new Vertex(new Vector3f(Float.valueOf(tokens[1]),
-//                                                        Float.valueOf(tokens[2]),
-//                                                        Float.valueOf(tokens[3]))));
-//                }
-//                else if(tokens[0].equals("f")) 
-//                {
-//                    indices.add(Integer.parseInt(tokens[1].split("/")[0]) - 1);
-//                    indices.add(Integer.parseInt(tokens[2].split("/")[0]) - 1);
-//                    indices.add(Integer.parseInt(tokens[3].split("/")[0]) - 1);
-//                    
-//                    if(tokens.length > 4)
-//                    {
-//                        indices.add(Integer.parseInt(tokens[1].split("/")[0]) - 1);
-//                        indices.add(Integer.parseInt(tokens[3].split("/")[0]) - 1);
-//                        indices.add(Integer.parseInt(tokens[4].split("/")[0]) - 1);
-//                    }
-//                }
-//            }
-//            
-//            meshReader.close();
-//            
-//            Vertex[] vertexData = new Vertex[vertices.size()];
-//            vertices.toArray(vertexData);
-//            
-//            Integer[] indexData = new Integer[indices.size()];
-//            indices.toArray(indexData);
-//            
-//            addVertices(vertexData, BufferUtil.toIntArray(indexData), true);
-//
-//        }
-//        catch(Exception e)
-//        {
-//            e.printStackTrace();
-//            System.exit(1);
-//        }        
+      addVertices(vertexData, BufferUtil.toIntArray(indexData), false );        
 
         return null;
     }
