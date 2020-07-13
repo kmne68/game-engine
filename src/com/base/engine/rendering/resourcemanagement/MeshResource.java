@@ -16,11 +16,15 @@ public class MeshResource {
   
     private int vbo;    // A pointer (handle)
     private int ibo;    // Described as an array of integers on the graphics card
+    private int size;
+    private int referenceCount;   // for counting meshes for deletion
   
-  public MeshResource() {
+  public MeshResource(int size) {
     
     vbo = glGenBuffers();
     ibo = glGenBuffers();
+    this.size = size;
+    this.referenceCount = 1;
   }
   
   @Override
@@ -29,6 +33,20 @@ public class MeshResource {
     glDeleteBuffers(vbo);
     glDeleteBuffers(ibo);
   }
+  
+  
+  public void addReference() {
+    
+    referenceCount++;    
+  }
+  
+  
+  public boolean removeReference() {
+    
+    referenceCount--;
+    return referenceCount == 0;
+    
+  }
 
   public int getVbo() {
     return vbo;
@@ -36,6 +54,14 @@ public class MeshResource {
 
   public int getIbo() {
     return ibo;
+  }
+
+  public int getSize() {
+    return size;
+  }
+
+  public void setSize(int size) {
+    this.size = size;
   }
   
 }

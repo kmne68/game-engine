@@ -59,6 +59,11 @@ public class TestGame extends Game {
     material.addFloat("specularIntensity", 1);
     material.addFloat("specularPower", 8);
     
+    Material material2 = new Material(); // (new Texture("test.png"), new Vector3f(1, 1, 1), 1, 8);
+    material2.addTexture("diffuse", new Texture("grid_texture.png"));
+    material2.addFloat("specularIntensity", 1);
+    material2.addFloat("specularPower", 8);
+    
     Mesh monkeyMesh = new Mesh("engine_monkey.obj");    // Benny calls this "tempMesh"
 
     MeshRenderer meshRenderer = new MeshRenderer(mesh, material);
@@ -126,6 +131,8 @@ public class TestGame extends Game {
     
     testMesh3.getTransform().getPosition().setVector3f(5, 5, 5);
     testMesh3.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float) Math.toRadians(-70.0f)));
+    
+    addObject(new GameObject().addComponent(new MeshRenderer(new Mesh("engine_monkey.obj"), material2)));
     
     directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), (float) Math.toRadians(-45)));
   }
