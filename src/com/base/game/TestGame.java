@@ -55,7 +55,8 @@ public class TestGame extends Game {
     Mesh mesh = new Mesh(vertices, indices, true);
     // the 1 and 8 are specular intensity and exponent, respectively
     Material material = new Material(); // (new Texture("test.png"), new Vector3f(1, 1, 1), 1, 8);
-    material.addTexture("diffuse", new Texture("test.png"));
+    // material.addTexture("diffuse", new Texture("test.png"));
+    material.addTexture("diffuse", new Texture("bricks.jpg"));
     material.addFloat("specularIntensity", 1);
     material.addFloat("specularPower", 8);
     

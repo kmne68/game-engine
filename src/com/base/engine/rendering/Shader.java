@@ -31,7 +31,7 @@ public class Shader {
       System.exit(1);
     }
   }
-  
+
   public void bind() {
     glUseProgram(program);
   }
@@ -59,7 +59,7 @@ public class Shader {
   public void addFragmentShader(String text) {
     addProgram(text, GL_FRAGMENT_SHADER);
   }
-  
+
   public void setAttributeLocation(String attributeName, int location) {
 
     glBindAttribLocation(program, location, attributeName);
@@ -99,7 +99,7 @@ public class Shader {
   }
 
   public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine) {
-    
+
   }
 
   private void addProgram(String text, int type) {
@@ -139,15 +139,24 @@ public class Shader {
   }
 
   private static String loadShader(String fileName) {
+
     StringBuilder shaderSource = new StringBuilder();
     BufferedReader shaderReader = null;
+    final String INCLUDE_DIRECTIVE = "#include";
 
+    // #include "file.h"
     try {
       shaderReader = new BufferedReader(new FileReader("./res/shaders/" + fileName));
       String line;
 
       while ((line = shaderReader.readLine()) != null) {
-        shaderSource.append(line).append("\n");
+
+        if (line.startsWith(INCLUDE_DIRECTIVE)) {
+
+          shaderSource.append(loadShader(line.substring(INCLUDE_DIRECTIVE.length() + 2, line.length() - 1)));
+        } else {
+          shaderSource.append(line).append("\n");
+        }
       }
 
       shaderReader.close();
