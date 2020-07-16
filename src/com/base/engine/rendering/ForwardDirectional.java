@@ -44,6 +44,7 @@ public class ForwardDirectional extends Shader {
     addUniform("specularPower");
     addUniform("eyePosition");
     
+    // Structs must be decomposed into uniforms
     addUniform("directionalLight.base.color");
     addUniform("directionalLight.base.intensity");
     addUniform("directionalLight.direction");

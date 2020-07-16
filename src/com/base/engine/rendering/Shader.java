@@ -65,6 +65,48 @@ public class Shader {
     glBindAttribLocation(program, location, attributeName);
   }
 
+  public void addAllAttributes(String shaderText) {
+
+    final String ATTRIBUTE_KEYWORD = "attribute";
+    int attributeStartLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD);
+    int attributeNumber = 0;
+
+    while (attributeStartLocation != -1) {
+
+      int begin = attributeStartLocation + ATTRIBUTE_KEYWORD.length() + 1;
+      int end = shaderText.indexOf(";", begin);
+
+      String attributeLine = shaderText.substring(begin, end);
+      String attributeName = attributeLine.substring(attributeLine.indexOf(' ') + 1, attributeLine.length());
+
+      setAttributeLocation(attributeName, attributeNumber);
+      attributeNumber++;
+
+      attributeStartLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD, attributeStartLocation + ATTRIBUTE_KEYWORD.length());
+    }
+
+  }
+
+  public void addAllUniforms(String shaderText) {
+
+    final String UNIFORM_KEYWORD = "uniform";
+    int uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD);
+
+    while (uniformStartLocation != -1) {
+
+      int begin = uniformStartLocation + UNIFORM_KEYWORD.length() + 1;
+      int end = shaderText.indexOf(";", begin);
+
+      String uniformLine = shaderText.substring(begin, end);
+      String uniformName = uniformLine.substring(uniformLine.indexOf(' ') + 1, uniformLine.length());
+
+      addUniform(uniformName);
+
+      uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD, uniformStartLocation + UNIFORM_KEYWORD.length());
+    }
+
+  }
+
   /**
    * Adds a uniform variable for use with shader files
    *
@@ -138,7 +180,7 @@ public class Shader {
     glUniformMatrix4(uniforms.get(uniformName), true, BufferUtil.createFlippedBuffer(value));
   }
 
-  private static String loadShader(String fileName) {
+  public static String loadShader(String fileName) {
 
     StringBuilder shaderSource = new StringBuilder();
     BufferedReader shaderReader = null;
