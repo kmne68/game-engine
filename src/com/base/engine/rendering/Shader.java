@@ -8,6 +8,7 @@ package com.base.engine.rendering;
 import com.base.engine.core.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL32.*;
@@ -84,10 +85,50 @@ public class Shader {
 
       attributeStartLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD, attributeStartLocation + ATTRIBUTE_KEYWORD.length());
     }
-
   }
+  
+  
+  private HashMap<String, ArrayList<String> > findUniformStructs(String shaderText) {
+    
+    HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>();
+    
+    final String STRUCT_KEYWORD = "struct";
+    int structStartLocation = shaderText.indexOf(STRUCT_KEYWORD);
+
+    while (structStartLocation != -1) {
+
+      int nameBegin = structStartLocation + STRUCT_KEYWORD.length() + 1;
+      int braceBegin = shaderText.indexOf("{", nameBegin);
+      int braceEnd = shaderText.indexOf("}", braceBegin);
+    //  int nameEnd = shaderText.indexOf(";", nameBegin);
+
+      String structName = shaderText.substring(nameBegin, braceBegin).trim();
+      ArrayList<String> structComponents = new ArrayList<String>();        
+      int componentSemicolonPosition = shaderText.indexOf(";", braceBegin);
+      
+      while(componentSemicolonPosition != -1 && componentSemicolonPosition < braceEnd) {
+        
+        int componentNameStart = componentSemicolonPosition;
+        while(shaderText.charAt(componentNameStart - 1) != ' ') {
+          componentNameStart--;
+        }
+        
+      //  structComponents.add(shaderText.substring(componentNameStart, componentSemicolonPosition));
+        System.out.println(shaderText.substring(componentNameStart, componentSemicolonPosition));
+        componentSemicolonPosition = shaderText.indexOf(";", componentSemicolonPosition + 1);
+      }
+
+      result.put(structName, structComponents);
+      structStartLocation = shaderText.indexOf(STRUCT_KEYWORD, structStartLocation + STRUCT_KEYWORD.length());
+    }
+    
+    return result;
+  }
+  
 
   public void addAllUniforms(String shaderText) {
+    
+    HashMap<String, ArrayList<String>> structs = findUniformStructs(shaderText);
 
     final String UNIFORM_KEYWORD = "uniform";
     int uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD);
