@@ -26,28 +26,7 @@ public class ForwardDirectional extends Shader {
 
   private ForwardDirectional() {
 
-    super();
-    
-    addVertexShaderFromFile("forward-directional.vs");    
-    addFragmentShaderFromFile("forward-directional.fs");
-    
-    setAttributeLocation("position", 0);
-    setAttributeLocation("textureCoordinate", 1);
-    setAttributeLocation("normal", 2);
-    
-    compileShader();
-
-    addUniform("model");
-    addUniform("MVP");
-    
-    addUniform("specularIntensity");
-    addUniform("specularPower");
-    addUniform("eyePosition");
-    
-    // Structs must be decomposed into uniforms
-    addUniform("directionalLight.base.color");
-    addUniform("directionalLight.base.intensity");
-    addUniform("directionalLight.direction");
+    super("forward-directional");
 
   }
 

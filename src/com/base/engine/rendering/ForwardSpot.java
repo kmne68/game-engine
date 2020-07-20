@@ -27,33 +27,7 @@ public class ForwardSpot extends Shader {
 
   private ForwardSpot() {
 
-    super();
-
-    addVertexShaderFromFile("forward-spot.vs");
-    addFragmentShaderFromFile("forward-spot.fs");
-
-    setAttributeLocation("position", 0);
-    setAttributeLocation("textureCoordinate", 1);
-    setAttributeLocation("normal", 2);
-
-    compileShader();
-
-    addUniform("model");
-    addUniform("MVP");
-
-    addUniform("specularIntensity");
-    addUniform("specularPower");
-    addUniform("eyePosition");
-
-    addUniform("spotLight.pointLight.base.color");
-    addUniform("spotLight.pointLight.base.intensity");
-    addUniform("spotLight.pointLight.attenuation.constant");
-    addUniform("spotLight.pointLight.attenuation.linear");
-    addUniform("spotLight.pointLight.attenuation.exponent");
-    addUniform("spotLight.pointLight.position");
-    addUniform("spotLight.pointLight.range");
-    addUniform("spotLight.direction");
-    addUniform("spotLight.cutoff");
+    super("forward-spot");
 
   }
 
