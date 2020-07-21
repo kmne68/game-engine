@@ -55,48 +55,42 @@ public class Shader {
 
   }  
 
-  public void addVertexShaderFromFile(String text) {
-    addProgram(loadShader(text), GL_VERTEX_SHADER);
-  }
-
-  public void addGeometryShaderFromFile(String text) {
-    addProgram(loadShader(text), GL_GEOMETRY_SHADER);
-  }
-
-  public void addFragmentShaderFromFile(String text) {
-    addProgram(loadShader(text), GL_FRAGMENT_SHADER);
-  }
-
-  public void addVertexShader(String text) {
+  private void addVertexShader(String text) {
     addProgram(text, GL_VERTEX_SHADER);
   }
 
-  public void addGeometryShader(String text) {
+  private void addGeometryShader(String text) {
     addProgram(text, GL_GEOMETRY_SHADER);
   }
 
-  public void addFragmentShader(String text) {
+  private void addFragmentShader(String text) {
     addProgram(text, GL_FRAGMENT_SHADER);
   }
 
-  public void setAttributeLocation(String attributeName, int location) {
+  private void setAttributeLocation(String attributeName, int location) {
 
     glBindAttribLocation(program, location, attributeName);
   }
 
-  public void addAllAttributes(String shaderText) {
+  private void addAllAttributes(String shaderText) {
 
     final String ATTRIBUTE_KEYWORD = "attribute";
     int attributeStartLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD);
     int attributeNumber = 0;
 
     while (attributeStartLocation != -1) {
+      
+      if( !( attributeStartLocation != 0
+              && (Character.isWhitespace(shaderText.charAt(attributeStartLocation - 1)) 
+              || shaderText.charAt(attributeStartLocation - 1 ) == ';' )
+              && Character.isWhitespace(shaderText.charAt(attributeStartLocation + ATTRIBUTE_KEYWORD.length()))))
+        continue;
 
       int begin = attributeStartLocation + ATTRIBUTE_KEYWORD.length() + 1;
       int end = shaderText.indexOf(";", begin);
 
-      String attributeLine = shaderText.substring(begin, end);
-      String attributeName = attributeLine.substring(attributeLine.indexOf(' ') + 1, attributeLine.length());
+      String attributeLine = shaderText.substring(begin, end).trim();
+      String attributeName = attributeLine.substring(attributeLine.indexOf(' ') + 1, attributeLine.length()).trim();
 
       setAttributeLocation(attributeName, attributeNumber);
       attributeNumber++;
@@ -113,12 +107,18 @@ public class Shader {
 
   private HashMap<String, ArrayList<GLSLStruct>> findUniformStructs(String shaderText) {
 
-    HashMap<String, ArrayList<GLSLStruct>> result = new HashMap<String, ArrayList<GLSLStruct>>();
+    HashMap<String, ArrayList<GLSLStruct>> result = new HashMap<>(); //<String, ArrayList<GLSLStruct>>();
 
     final String STRUCT_KEYWORD = "struct";
     int structStartLocation = shaderText.indexOf(STRUCT_KEYWORD);
 
     while (structStartLocation != -1) {
+      
+      if( !( structStartLocation != 0
+              && (Character.isWhitespace(shaderText.charAt(structStartLocation - 1 ) )
+              || shaderText.charAt(structStartLocation - 1 ) == ';')
+              && Character.isWhitespace(shaderText.charAt(structStartLocation + STRUCT_KEYWORD.length()))))
+        continue;
 
       int nameBegin = structStartLocation + STRUCT_KEYWORD.length() + 1;
       int braceBegin = shaderText.indexOf("{", nameBegin);
@@ -130,15 +130,24 @@ public class Shader {
       int componentSemicolonPosition = shaderText.indexOf(";", braceBegin);
 
       while (componentSemicolonPosition != -1 && componentSemicolonPosition < braceEnd) {
+        
+        int componentNameEnd = componentSemicolonPosition + 1;
+        
+        while(Character.isWhitespace(shaderText.charAt(componentNameEnd - 1))
+                || shaderText.charAt(componentNameEnd - 1 ) == ';' )
+          componentNameEnd--;
 
         int componentNameStart = componentSemicolonPosition;
         while (!Character.isWhitespace(shaderText.charAt(componentNameStart - 1))) {
           componentNameStart--;
         }
 
-        int componentTypeEnd = componentNameStart - 1;
+        int componentTypeEnd = componentNameStart;
+        while(Character.isWhitespace(shaderText.charAt(componentTypeEnd - 1)))
+          componentTypeEnd--;
+        
+        
         int componentTypeStart = componentTypeEnd;
-
         while (!Character.isWhitespace(shaderText.charAt(componentTypeStart - 1))) {
           componentTypeStart--;
         }
@@ -164,7 +173,7 @@ public class Shader {
   }
 
   
-  public void addAllUniforms(String shaderText) {
+  private void addAllUniforms(String shaderText) {
 
     HashMap<String, ArrayList<GLSLStruct> > structs = findUniformStructs(shaderText);
 
@@ -172,16 +181,22 @@ public class Shader {
     int uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD);
 
     while (uniformStartLocation != -1) {
+      
+      if( !( uniformStartLocation != 0
+              && (Character.isWhitespace(shaderText.charAt(uniformStartLocation - 1 ) )
+              || shaderText.charAt(uniformStartLocation - 1 ) == ';')
+              && Character.isWhitespace(shaderText.charAt(uniformStartLocation + UNIFORM_KEYWORD.length()))))
+        continue;
 
       int begin = uniformStartLocation + UNIFORM_KEYWORD.length() + 1;
       int end = shaderText.indexOf(";", begin);
 
-      String uniformLine = shaderText.substring(begin, end);
+      String uniformLine = shaderText.substring(begin, end).trim();
       
-      int whitespacePosition = uniformLine.indexOf(' ');
+      int whitespacePosition = uniformLine.indexOf(' ');  // could be generalized to include other whitespace characters (tab, newline)
       
-      String uniformName = uniformLine.substring(whitespacePosition + 1, uniformLine.length());
-      String uniformType = uniformLine.substring(0, whitespacePosition);
+      String uniformName = uniformLine.substring(whitespacePosition + 1, uniformLine.length()).trim();
+      String uniformType = uniformLine.substring(0, whitespacePosition).trim();
       
       addUniformWithStructCheck(uniformName, uniformType, structs);
 
@@ -214,7 +229,7 @@ public class Shader {
    *
    * @param uniform
    */
-  public void addUniform(String uniform) {
+  private void addUniform(String uniform) {
     int uniformLocation = glGetUniformLocation(program, uniform);
 
     if (uniformLocation == 0xFFFFFF) {
@@ -226,7 +241,8 @@ public class Shader {
     uniforms.put(uniform, uniformLocation);
   }
 
-  public void compileShader() {
+  
+  private void compileShader() {
     glLinkProgram(program);
 
     if (glGetProgrami(program, GL_LINK_STATUS) == 0) {
@@ -279,7 +295,7 @@ public class Shader {
     glUniformMatrix4(uniforms.get(uniformName), true, BufferUtil.createFlippedBuffer(value));
   }
 
-  public static String loadShader(String fileName) {
+  private static String loadShader(String fileName) {
 
     StringBuilder shaderSource = new StringBuilder();
     BufferedReader shaderReader = null;
