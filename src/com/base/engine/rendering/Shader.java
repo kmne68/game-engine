@@ -21,11 +21,15 @@ public class Shader {
 
   private int program;
   private HashMap<String, Integer> uniforms;
+  private ArrayList<String> uniformNames;
+  private ArrayList<String> uniformTypes;
 
   public Shader(String fileName) {
 
     program = glCreateProgram();
     uniforms = new HashMap<String, Integer>();
+    uniformNames = new ArrayList<String>();
+    uniformTypes = new ArrayList<String>();
 
     if (program == 0) {
       System.err.println("Shader creation failed: Could not find valid memor location in constructor.");
@@ -52,8 +56,37 @@ public class Shader {
   
 
   public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine) {
+    
+    Matrix4f worldMatrix = transform.getTransformation();
+    Matrix4f MVPMatrix = renderingEngine.getMainCamera().getViewProjection().multiplyMatrix(worldMatrix);
 
-  }  
+    for(int i = 0; i < uniformNames.size(); i++) {
+      String uniformName = uniformNames.get(i);
+      String uniformType = uniformTypes.get(i);
+      
+      if(uniformName.startsWith("T_"))  {
+        if(uniformName.equals("T_MVP")) {
+          setUniform(uniformName, MVPMatrix);
+        }
+        else if(uniformName.equals("T_world")) {
+          setUniform(uniformName, worldMatrix);
+        }
+        else {
+          throw new IllegalArgumentException(uniformName + " is not a valid component of Transform");
+        }
+      }
+      else if(uniformName.startsWith("R_")) {
+        if(uniformType.equals("sampler2D")) {
+          String unprefixedUniformName = uniformName.substring(2);
+          int samplerSlot = renderingEngine.getSamplerSlot(unprefixedUniformName);
+          material.getTexture(unprefixedUniformName).bind(samplerSlot);
+          setUniformi(uniformName, samplerSlot);
+        }
+      }
+      
+    }
+  }
+  
 
   private void addVertexShader(String text) {
     addProgram(text, GL_VERTEX_SHADER);
@@ -198,7 +231,7 @@ public class Shader {
       String uniformName = uniformLine.substring(whitespacePosition + 1, uniformLine.length()).trim();
       String uniformType = uniformLine.substring(0, whitespacePosition).trim();
       
-      addUniformWithStructCheck(uniformName, uniformType, structs);
+      addUniform(uniformName, uniformType, structs);
 
       uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD, uniformStartLocation + UNIFORM_KEYWORD.length());
     }
@@ -206,7 +239,7 @@ public class Shader {
   }
   
   
-  public void addUniformWithStructCheck(String uniformName, String uniformType, HashMap<String, ArrayList<GLSLStruct>> structs ) {
+  public void addUniform(String uniformName, String uniformType, HashMap<String, ArrayList<GLSLStruct>> structs ) {
         
     boolean addThis = true;
     ArrayList<GLSLStruct> structComponents = structs.get(uniformType);
@@ -215,12 +248,26 @@ public class Shader {
       addThis = false;
       
       for(GLSLStruct struct : structComponents) {
-        addUniformWithStructCheck(uniformName + "." + struct.name, struct.type, structs);
+        addUniform(uniformName + "." + struct.name, struct.type, structs);
       }
     }
     
-    if(addThis)
-      addUniform(uniformName);
+    if(!addThis)
+      return;
+    
+    // Add a uniform variable for use with shader files
+    int uniformLocation = glGetUniformLocation(program, uniformName);
+
+    if (uniformLocation == 0xFFFFFF) {
+      System.out.println("Error: could not find uniform " + uniformName);
+      new Exception().printStackTrace();
+      System.exit(1);
+    }
+
+    uniforms.put(uniformName, uniformLocation);
+    uniformNames.add(uniformName);
+    uniformTypes.add(uniformType);
+    
   }
   
 
@@ -229,17 +276,7 @@ public class Shader {
    *
    * @param uniform
    */
-  private void addUniform(String uniform) {
-    int uniformLocation = glGetUniformLocation(program, uniform);
 
-    if (uniformLocation == 0xFFFFFF) {
-      System.out.println("Error: could not find uniform " + uniform);
-      new Exception().printStackTrace();
-      System.exit(1);
-    }
-
-    uniforms.put(uniform, uniformLocation);
-  }
 
   
   private void compileShader() {

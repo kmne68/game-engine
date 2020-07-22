@@ -11,6 +11,7 @@ import com.base.engine.core.GameObject;
 import com.base.engine.core.Vector3f;
 import com.base.engine.rendering.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import static org.lwjgl.opengl.GL11.GL_BACK;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
@@ -48,9 +49,15 @@ public class RenderingEngine {
   private ArrayList<BaseLight> lights;
   private BaseLight activeLight;
   
+  private HashMap<String, Integer> samplerMap;
+  
   public RenderingEngine() {
     
     lights = new ArrayList<BaseLight>();
+    samplerMap = new HashMap<String, Integer>();
+    
+    samplerMap.put("diffuse", 0);
+    
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // All pixels to black
 
     glFrontFace(GL_CW);
@@ -101,7 +108,7 @@ public class RenderingEngine {
   
   public void render(GameObject object) {
     
-    clearScreen();
+    // clearScreen();
     
     lights.clear();
     object.addToRenderingEngine(this);
@@ -126,7 +133,8 @@ public class RenderingEngine {
     glDisable(GL_BLEND);
   }
   
-    private static void clearScreen() {
+  // Bennie ditched this but I want to keep it
+  private static void clearScreen() {
     //TODO: Stencil Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
@@ -134,27 +142,7 @@ public class RenderingEngine {
   public static String getOpenGLVersion() {
     return glGetString(GL_VERSION);
   }
-  
-  
-  private static void setClearColor(Vector3f color) {
-    
-    glClearColor(color.getX(), color.getY(), color.getZ(), 1.0f);
-    
-  }
 
-  private static void setTextures(boolean enabled) {
-    if (enabled) {
-      glEnable(GL_TEXTURE_2D);
-    } else {
-      glDisable(GL_TEXTURE_2D);
-    }
-  }
-  
-  private static void unbindTextures() {
-    
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
-  }
   
   public void addLight(BaseLight light) {
     
@@ -169,6 +157,11 @@ public class RenderingEngine {
   public BaseLight getActiveLight() {
     
     return activeLight;
+  }
+  
+  public int getSamplerSlot(String samplerName) {
+    
+    return samplerMap.get(samplerName);
   }
 
   public void setMainCamera(Camera mainCamera) {

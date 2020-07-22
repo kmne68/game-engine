@@ -28,6 +28,8 @@ import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
 import static org.lwjgl.opengl.GL11.glTexParameterf;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 /**
  *
@@ -62,9 +64,19 @@ public class Texture {
     }
   }
 
-  public void bind() {
+  public void bind(int samplerSlot) {
+    
+    assert(samplerSlot >= 0 && samplerSlot <= 31);
+    glActiveTexture(GL_TEXTURE0 + samplerSlot);
     glBindTexture(GL_TEXTURE_2D, resource.getId());
   }
+  
+  
+  // dummy method temporarily to avoid breaking other rendering components that relied on a bind method without arguments
+  public void bind() {
+    bind(0);
+  }
+  
 
   public int getID() {
     return resource.getId();
