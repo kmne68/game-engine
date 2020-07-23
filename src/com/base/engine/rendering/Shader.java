@@ -35,58 +35,67 @@ public class Shader {
       System.err.println("Shader creation failed: Could not find valid memor location in constructor.");
       System.exit(1);
     }
-    
+
     String vertexShaderText = loadShader(fileName + ".vs");
     String fragmentShaderText = loadShader(fileName + ".fs");
-    
-    addVertexShader(vertexShaderText);    
+
+    addVertexShader(vertexShaderText);
     addFragmentShader(fragmentShaderText);
-    
+
     addAllAttributes(vertexShaderText);
-    
+
     compileShader();
-    
+
     addAllUniforms(vertexShaderText);
-    addAllUniforms(fragmentShaderText);    
+    addAllUniforms(fragmentShaderText);
   }
 
   public void bind() {
     glUseProgram(program);
   }
-  
 
   public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine) {
-    
+
     Matrix4f worldMatrix = transform.getTransformation();
     Matrix4f MVPMatrix = renderingEngine.getMainCamera().getViewProjection().multiplyMatrix(worldMatrix);
 
-    for(int i = 0; i < uniformNames.size(); i++) {
+    for (int i = 0; i < uniformNames.size(); i++) {
       String uniformName = uniformNames.get(i);
       String uniformType = uniformTypes.get(i);
-      
-      if(uniformName.startsWith("T_"))  {
-        if(uniformName.equals("T_MVP")) {
+
+      if (uniformName.startsWith("T_")) {
+        if (uniformName.equals("T_MVP")) {
           setUniform(uniformName, MVPMatrix);
-        }
-        else if(uniformName.equals("T_world")) {
+        } else if (uniformName.equals("T_world")) {
           setUniform(uniformName, worldMatrix);
-        }
-        else {
+        } else {
           throw new IllegalArgumentException(uniformName + " is not a valid component of Transform");
         }
-      }
-      else if(uniformName.startsWith("R_")) {
-        if(uniformType.equals("sampler2D")) {
+      } else if (uniformName.startsWith("R_")) {
+        if (uniformType.equals("sampler2D")) {
           String unprefixedUniformName = uniformName.substring(2);
           int samplerSlot = renderingEngine.getSamplerSlot(unprefixedUniformName);
           material.getTexture(unprefixedUniformName).bind(samplerSlot);
           setUniformi(uniformName, samplerSlot);
+        } 
+        else if (uniformType.equals("vec3")) {
+            setUniform(uniformName, renderingEngine.getVector3f(uniformName.substring(2)));
+        } 
+        else if (uniformType.equals("float")) {
+            setUniformf(uniformName, renderingEngine.getFloat(uniformName.substring(2)));
+        } 
+        else {
+          if(uniformType.equals("vec3")) {
+            setUniform(uniformName, material.getVector3f(uniformName));
+        }
+          else if(uniformType.equals("float")) {
+            setUniformf(uniformName, material.getFloat(uniformName));
+        }
         }
       }
-      
+
     }
   }
-  
 
   private void addVertexShader(String text) {
     addProgram(text, GL_VERTEX_SHADER);
@@ -112,12 +121,13 @@ public class Shader {
     int attributeNumber = 0;
 
     while (attributeStartLocation != -1) {
-      
-      if( !( attributeStartLocation != 0
-              && (Character.isWhitespace(shaderText.charAt(attributeStartLocation - 1)) 
-              || shaderText.charAt(attributeStartLocation - 1 ) == ';' )
-              && Character.isWhitespace(shaderText.charAt(attributeStartLocation + ATTRIBUTE_KEYWORD.length()))))
+
+      if (!(attributeStartLocation != 0
+              && (Character.isWhitespace(shaderText.charAt(attributeStartLocation - 1))
+              || shaderText.charAt(attributeStartLocation - 1) == ';')
+              && Character.isWhitespace(shaderText.charAt(attributeStartLocation + ATTRIBUTE_KEYWORD.length())))) {
         continue;
+      }
 
       int begin = attributeStartLocation + ATTRIBUTE_KEYWORD.length() + 1;
       int end = shaderText.indexOf(";", begin);
@@ -146,12 +156,13 @@ public class Shader {
     int structStartLocation = shaderText.indexOf(STRUCT_KEYWORD);
 
     while (structStartLocation != -1) {
-      
-      if( !( structStartLocation != 0
-              && (Character.isWhitespace(shaderText.charAt(structStartLocation - 1 ) )
-              || shaderText.charAt(structStartLocation - 1 ) == ';')
-              && Character.isWhitespace(shaderText.charAt(structStartLocation + STRUCT_KEYWORD.length()))))
+
+      if (!(structStartLocation != 0
+              && (Character.isWhitespace(shaderText.charAt(structStartLocation - 1))
+              || shaderText.charAt(structStartLocation - 1) == ';')
+              && Character.isWhitespace(shaderText.charAt(structStartLocation + STRUCT_KEYWORD.length())))) {
         continue;
+      }
 
       int nameBegin = structStartLocation + STRUCT_KEYWORD.length() + 1;
       int braceBegin = shaderText.indexOf("{", nameBegin);
@@ -163,12 +174,13 @@ public class Shader {
       int componentSemicolonPosition = shaderText.indexOf(";", braceBegin);
 
       while (componentSemicolonPosition != -1 && componentSemicolonPosition < braceEnd) {
-        
+
         int componentNameEnd = componentSemicolonPosition + 1;
-        
-        while(Character.isWhitespace(shaderText.charAt(componentNameEnd - 1))
-                || shaderText.charAt(componentNameEnd - 1 ) == ';' )
+
+        while (Character.isWhitespace(shaderText.charAt(componentNameEnd - 1))
+                || shaderText.charAt(componentNameEnd - 1) == ';') {
           componentNameEnd--;
+        }
 
         int componentNameStart = componentSemicolonPosition;
         while (!Character.isWhitespace(shaderText.charAt(componentNameStart - 1))) {
@@ -176,10 +188,10 @@ public class Shader {
         }
 
         int componentTypeEnd = componentNameStart;
-        while(Character.isWhitespace(shaderText.charAt(componentTypeEnd - 1)))
+        while (Character.isWhitespace(shaderText.charAt(componentTypeEnd - 1))) {
           componentTypeEnd--;
-        
-        
+        }
+
         int componentTypeStart = componentTypeEnd;
         while (!Character.isWhitespace(shaderText.charAt(componentTypeStart - 1))) {
           componentTypeStart--;
@@ -193,68 +205,68 @@ public class Shader {
         glslStruct.type = componentType;
 
         System.out.println(componentType);
-        
+
         glslStructs.add(glslStruct);
         componentSemicolonPosition = shaderText.indexOf(";", componentSemicolonPosition + 1);
       }
 
-      result.put(structName, glslStructs );
+      result.put(structName, glslStructs);
       structStartLocation = shaderText.indexOf(STRUCT_KEYWORD, structStartLocation + STRUCT_KEYWORD.length());
     }
 
     return result;
   }
 
-  
   private void addAllUniforms(String shaderText) {
 
-    HashMap<String, ArrayList<GLSLStruct> > structs = findUniformStructs(shaderText);
+    HashMap<String, ArrayList<GLSLStruct>> structs = findUniformStructs(shaderText);
 
     final String UNIFORM_KEYWORD = "uniform";
     int uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD);
 
     while (uniformStartLocation != -1) {
-      
-      if( !( uniformStartLocation != 0
-              && (Character.isWhitespace(shaderText.charAt(uniformStartLocation - 1 ) )
-              || shaderText.charAt(uniformStartLocation - 1 ) == ';')
-              && Character.isWhitespace(shaderText.charAt(uniformStartLocation + UNIFORM_KEYWORD.length()))))
+
+      if (!(uniformStartLocation != 0
+              && (Character.isWhitespace(shaderText.charAt(uniformStartLocation - 1))
+              || shaderText.charAt(uniformStartLocation - 1) == ';')
+              && Character.isWhitespace(shaderText.charAt(uniformStartLocation + UNIFORM_KEYWORD.length())))) {
         continue;
+      }
 
       int begin = uniformStartLocation + UNIFORM_KEYWORD.length() + 1;
       int end = shaderText.indexOf(";", begin);
 
       String uniformLine = shaderText.substring(begin, end).trim();
-      
+
       int whitespacePosition = uniformLine.indexOf(' ');  // could be generalized to include other whitespace characters (tab, newline)
-      
+
       String uniformName = uniformLine.substring(whitespacePosition + 1, uniformLine.length()).trim();
       String uniformType = uniformLine.substring(0, whitespacePosition).trim();
-      
+
       addUniform(uniformName, uniformType, structs);
 
       uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD, uniformStartLocation + UNIFORM_KEYWORD.length());
     }
 
   }
-  
-  
-  public void addUniform(String uniformName, String uniformType, HashMap<String, ArrayList<GLSLStruct>> structs ) {
-        
+
+  public void addUniform(String uniformName, String uniformType, HashMap<String, ArrayList<GLSLStruct>> structs) {
+
     boolean addThis = true;
     ArrayList<GLSLStruct> structComponents = structs.get(uniformType);
-    
-    if(structComponents != null) {
+
+    if (structComponents != null) {
       addThis = false;
-      
-      for(GLSLStruct struct : structComponents) {
+
+      for (GLSLStruct struct : structComponents) {
         addUniform(uniformName + "." + struct.name, struct.type, structs);
       }
     }
-    
-    if(!addThis)
+
+    if (!addThis) {
       return;
-    
+    }
+
     // Add a uniform variable for use with shader files
     int uniformLocation = glGetUniformLocation(program, uniformName);
 
@@ -267,18 +279,14 @@ public class Shader {
     uniforms.put(uniformName, uniformLocation);
     uniformNames.add(uniformName);
     uniformTypes.add(uniformType);
-    
+
   }
-  
 
   /**
    * Adds a uniform variable for use with shader files
    *
    * @param uniform
    */
-
-
-  
   private void compileShader() {
     glLinkProgram(program);
 
@@ -294,7 +302,6 @@ public class Shader {
       System.exit(1);
     }
   }
-
 
   private void addProgram(String text, int type) {
 

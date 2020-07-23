@@ -10,6 +10,7 @@ import com.base.engine.components.BaseLight;
 import com.base.engine.core.GameObject;
 import com.base.engine.core.Vector3f;
 import com.base.engine.rendering.*;
+import com.base.engine.rendering.resourcemanagement.MappedValues;
 import java.util.ArrayList;
 import java.util.HashMap;
 import static org.lwjgl.opengl.GL11.GL_BACK;
@@ -41,23 +42,30 @@ import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
  *
  * @author kmne6
  */
-public class RenderingEngine {
-  
+public class RenderingEngine extends MappedValues {
+
   private Camera mainCamera;
   private Vector3f ambientLight;
-  
+
   private ArrayList<BaseLight> lights;
   private BaseLight activeLight;
-  
+
+//  private Shader forwardAmbient;          // added 2020-07-22
   private HashMap<String, Integer> samplerMap;
-  
+//  private HashMap<String, Vector3f> vector3fHashMap;
+//  private HashMap<String, Float> floatHashMap;
+
   public RenderingEngine() {
-    
+
+    super();
     lights = new ArrayList<BaseLight>();
     samplerMap = new HashMap<String, Integer>();
-    
+
     samplerMap.put("diffuse", 0);
     
+    addVector3f("ambient", new Vector3f(0.1f, 0.1f, 0.1f));
+
+  //  forwardAmbient = new Shader("forward-ambient");          // added 2020-07-22
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // All pixels to black
 
     glFrontFace(GL_CW);
@@ -67,13 +75,13 @@ public class RenderingEngine {
 
     glEnable(GL_DEPTH_CLAMP);
     glEnable(GL_TEXTURE_2D);
-    
+
 //    mainCamera = new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f );
-    ambientLight = new Vector3f(0.2f, 0.2f, 0.2f);
+//    ambientLight = new Vector3f(0.2f, 0.2f, 0.2f);
 //    activeDirectionalLight = new DirectionalLight(new BaseLight(new Vector3f(0, 0, 1), 0.4f), new Vector3f(1, 1, 1));
 //    directionalLight2 = new DirectionalLight(new BaseLight(new Vector3f(1, 0, 0), 0.4f), new Vector3f(-1, 1, -1));
 //    activePointLight = new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);
-    
+
 //    int lightFieldWidth = 5;
 //    int lightFieldDepth = 5;
 //    
@@ -96,42 +104,49 @@ public class RenderingEngine {
 //    
 //    spotLight = new SpotLight(new PointLight(new BaseLight(new Vector3f(0, 1, 1), 0.8f),
 //                              new Attenuation(0, 0, 0.01f), new Vector3f(lightFieldStartX, 0, lightFieldStartY), 100), new Vector3f(1, 0, 0), 0.7f);
-    
-  }
-  
-  
-  public Vector3f getAmbientLight() {
-    
-    return ambientLight;
   }
 
-  
+//  public Vector3f getAmbientLight() {
+//
+//    return ambientLight;
+//  }
+
   public void render(GameObject object) {
-    
-    // clearScreen();
-    
+
+    // clearScreen();    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     lights.clear();
     object.addToRenderingEngine(this);
-    
+
     Shader forwardAmbient = ForwardAmbient.getInstance();
-    
+
     object.render(forwardAmbient, this);
-    
-    glEnable(GL_BLEND);    
+
+    glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE);
-    glDepthMask(false);    
+    glDepthMask(false);
     glDepthFunc(GL_EQUAL);
-    
-    for(BaseLight light : lights) {
-            
+
+    for (BaseLight light : lights) {
+
       activeLight = light;
       object.render(light.getShader(), this);
     }
-    
-    glDepthFunc(GL_LESS);    
+
+    glDepthFunc(GL_LESS);
     glDepthMask(true);
     glDisable(GL_BLEND);
   }
+
+//  private void addVector3f(String name, Vector3f vector3f) {
+//    vector3fHashMap.put(name, vector3f);
+//  }
+//
+//  private void addFloat(String name, float floatValue) {
+//    floatHashMap.put(name, floatValue);
+//  }
+
   
   // Bennie ditched this but I want to keep it
   private static void clearScreen() {
@@ -143,35 +158,34 @@ public class RenderingEngine {
     return glGetString(GL_VERSION);
   }
 
-  
   public void addLight(BaseLight light) {
-    
+
     lights.add(light);
   }
 
   public Camera getMainCamera() {
-    
+
     return mainCamera;
   }
-  
+
   public BaseLight getActiveLight() {
-    
+
     return activeLight;
   }
-  
+
   public int getSamplerSlot(String samplerName) {
-    
+
     return samplerMap.get(samplerName);
   }
 
   public void setMainCamera(Camera mainCamera) {
-    
+
     this.mainCamera = mainCamera;
   }
-  
+
   public void addCamera(Camera camera) {
-    
+
     mainCamera = camera;
   }
-  
+
 }
