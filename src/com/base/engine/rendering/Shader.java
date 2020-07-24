@@ -5,6 +5,10 @@
  */
 package com.base.engine.rendering;
 
+import com.base.engine.components.BaseLight;
+import com.base.engine.components.DirectionalLight;
+import com.base.engine.components.PointLight;
+import com.base.engine.components.SpotLight;
 import com.base.engine.core.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,6 +25,9 @@ public class Shader {
 
   private int program;
   private HashMap<String, Integer> uniforms;
+  
+  private static HashMap<String, ShaderResource> loadShaders = new HashMap<String, ShaderResource>();
+  
   private ArrayList<String> uniformNames;
   private ArrayList<String> uniformTypes;
 
@@ -59,41 +66,57 @@ public class Shader {
     Matrix4f worldMatrix = transform.getTransformation();
     Matrix4f MVPMatrix = renderingEngine.getMainCamera().getViewProjection().multiplyMatrix(worldMatrix);
 
-    for (int i = 0; i < uniformNames.size(); i++) {
+    for (int i = 0; i < resource.getUniformNames().size(); i++) 
+    {
       String uniformName = uniformNames.get(i);
       String uniformType = uniformTypes.get(i);
-
-      if (uniformName.startsWith("T_")) {
-        if (uniformName.equals("T_MVP")) {
-          setUniform(uniformName, MVPMatrix);
-        } else if (uniformName.equals("T_world")) {
-          setUniform(uniformName, worldMatrix);
-        } else {
-          throw new IllegalArgumentException(uniformName + " is not a valid component of Transform");
-        }
-      } else if (uniformName.startsWith("R_")) {
-        if (uniformType.equals("sampler2D")) {
-          String unprefixedUniformName = uniformName.substring(2);
-          int samplerSlot = renderingEngine.getSamplerSlot(unprefixedUniformName);
-          material.getTexture(unprefixedUniformName).bind(samplerSlot);
+      
+      if (uniformType.equals("sampler2D"))
+      {
+          int samplerSlot = renderingEngine.getSamplerSlot(uniformName);
+          material.getTexture(uniformName).bind(samplerSlot);
           setUniformi(uniformName, samplerSlot);
-        } 
-        else if (uniformType.equals("vec3")) {
-            setUniform(uniformName, renderingEngine.getVector3f(uniformName.substring(2)));
-        } 
-        else if (uniformType.equals("float")) {
-            setUniformf(uniformName, renderingEngine.getFloat(uniformName.substring(2)));
-        } 
-        else {
-          if(uniformType.equals("vec3")) {
-            setUniform(uniformName, material.getVector3f(uniformName));
-        }
-          else if(uniformType.equals("float")) {
-            setUniformf(uniformName, material.getFloat(uniformName));
-        }
-        }
+      } 
+      else if(uniformName.startsWith("T_"))
+      {
+        if (uniformName.equals("T_MVP"))
+          setUniform(uniformName, MVPMatrix);
+        else if (uniformName.equals("T_model"))
+          setUniform(uniformName, worldMatrix);
+        else
+          throw new IllegalArgumentException(uniformName + " is not a valid component of Transform");
+      } 
+      else if (uniformName.startsWith("R_"))
+      {        
+        String unprefixedUniformName = uniformName.substring(2);
+      
+        if (uniformType.equals("vec3"))
+          setUniform(uniformName, renderingEngine.getVector3f(unprefixedUniformName));
+        else if (uniformType.equals("float")) 
+          setUniformf(uniformName, renderingEngine.getFloat(unprefixedUniformName));
+        else if (uniformType.equals("DirectionalLight")) 
+          setUniformDirectionalLight(uniformName, (DirectionalLight) renderingEngine.getActiveLight());
+        else if (uniformType.equals("PointLight")) 
+          setUniformPointLight(uniformName, (PointLight) renderingEngine.getActiveLight());
+        else if (uniformType.equals("SpotLight")) 
+          setUniformSpotLight(uniformName, (SpotLight) renderingEngine.getActiveLight());                
+        else
+          renderingEngine.updateUniformStruct(transform, material, this, uniformName, uniformType);
       }
-
+      else if (uniformName.startsWith("C_")) {
+        if(uniformName.equals("C_eyePosition"))
+          setUniform(uniformName, renderingEngine.getMainCamera().getTransform().getTransformPosition());
+        else
+          throw new IllegalArgumentException(uniformName + " is not a valid component of Camera.");
+      }
+      else {
+        if (uniformType.equals("vec3")) 
+          setUniform(uniformName, material.getVector3f(uniformName));        
+        else if (uniformType.equals("float")) 
+          setUniformf(uniformName, material.getFloat(uniformName));
+        else
+          throw new IllegalArgumentException(uniformType + " is not a supported type in Material.");
+      }
     }
   }
 
@@ -226,12 +249,12 @@ public class Shader {
 
     while (uniformStartLocation != -1) {
 
-      if (!(uniformStartLocation != 0
-              && (Character.isWhitespace(shaderText.charAt(uniformStartLocation - 1))
-              || shaderText.charAt(uniformStartLocation - 1) == ';')
-              && Character.isWhitespace(shaderText.charAt(uniformStartLocation + UNIFORM_KEYWORD.length())))) {
-        continue;
-      }
+//      if (!(uniformStartLocation != 0
+//              && (Character.isWhitespace(shaderText.charAt(uniformStartLocation - 1))
+//              || shaderText.charAt(uniformStartLocation - 1) == ';')
+//              && Character.isWhitespace(shaderText.charAt(uniformStartLocation + UNIFORM_KEYWORD.length())))) {
+//        continue;
+//      }
 
       int begin = uniformStartLocation + UNIFORM_KEYWORD.length() + 1;
       int end = shaderText.indexOf(";", begin);
@@ -243,6 +266,8 @@ public class Shader {
       String uniformName = uniformLine.substring(whitespacePosition + 1, uniformLine.length()).trim();
       String uniformType = uniformLine.substring(0, whitespacePosition).trim();
 
+      uniformNames.add(uniformName);
+      uniformTypes.add(uniformType);
       addUniform(uniformName, uniformType, structs);
 
       uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD, uniformStartLocation + UNIFORM_KEYWORD.length());
@@ -277,8 +302,6 @@ public class Shader {
     }
 
     uniforms.put(uniformName, uniformLocation);
-    uniformNames.add(uniformName);
-    uniformTypes.add(uniformType);
 
   }
 
@@ -367,6 +390,36 @@ public class Shader {
     }
 
     return shaderSource.toString();
+  }
+  
+  public void setUniformBaseLight(String uniformName, BaseLight baseLight) {
+    
+    setUniform( uniformName + ".color", baseLight.getColor() );
+    setUniformf( uniformName + ".intensity", baseLight.getIntensity() );
+  }
+  
+  public void setUniformDirectionalLight(String uniformName, DirectionalLight directionalLight) {
+    
+    setUniformBaseLight( uniformName + ".base", directionalLight );
+    setUniform( uniformName + ".direction", directionalLight.getDirection() );
+  }
+
+  public void setUniformPointLight(String uniformName, PointLight pointLight) {
+    
+    setUniformBaseLight(uniformName + ".base", pointLight);
+    setUniformf(uniformName + ".attenuation.constant", pointLight.getConstant());
+    setUniformf(uniformName + ".attenuation.linear", pointLight.getLinear());
+    setUniformf(uniformName + ".attenuation.exponent", pointLight.getExponent());
+    setUniform(uniformName + ".position", pointLight.getTransform().getTransformPosition());
+    setUniformf(uniformName + ".range", pointLight.getRange());
+  }
+  
+  
+  public void setUniformSpotLight(String uniformName, SpotLight spotLight) {
+
+    setUniformPointLight(uniformName + ".pointLight", spotLight);
+    setUniform(uniformName + ".direction", spotLight.getDirection());
+    setUniformf(uniformName + ".cutoff", spotLight.getCutoff());
   }
 
 }

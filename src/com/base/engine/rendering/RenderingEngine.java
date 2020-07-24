@@ -8,6 +8,7 @@ package com.base.engine.rendering;
 import com.base.engine.components.Camera;
 import com.base.engine.components.BaseLight;
 import com.base.engine.core.GameObject;
+import com.base.engine.core.Transform;
 import com.base.engine.core.Vector3f;
 import com.base.engine.rendering.*;
 import com.base.engine.rendering.resourcemanagement.MappedValues;
@@ -186,6 +187,12 @@ public class RenderingEngine extends MappedValues {
   public void addCamera(Camera camera) {
 
     mainCamera = camera;
+  }
+  
+  
+  public void updateUniformStruct(Transform transform, Material material, Shader shader, String uniformName, String uniformType) {
+    
+    throw new IllegalArgumentException(uniformType + "is not a supported type in RenderingEngine");
   }
 
 }
