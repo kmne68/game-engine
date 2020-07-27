@@ -42,5 +42,5 @@ public class Material extends MappedValues {
   public void addTexture(String name, Texture texture) {
     textureHashMap.put(name, texture);
   }
-  
+    
 }

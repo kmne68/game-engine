@@ -48,11 +48,12 @@ public class RenderingEngine extends MappedValues {
   private Camera mainCamera;
   private Vector3f ambientLight;
 
+  private HashMap<String, Integer> samplerMap;
   private ArrayList<BaseLight> lights;
   private BaseLight activeLight;
 
-//  private Shader forwardAmbient;          // added 2020-07-22
-  private HashMap<String, Integer> samplerMap;
+  private Shader forwardAmbient;          // added 2020-07-22
+
 //  private HashMap<String, Vector3f> vector3fHashMap;
 //  private HashMap<String, Float> floatHashMap;
 
@@ -66,7 +67,7 @@ public class RenderingEngine extends MappedValues {
     
     addVector3f("ambient", new Vector3f(0.1f, 0.1f, 0.1f));
 
-  //  forwardAmbient = new Shader("forward-ambient");          // added 2020-07-22
+    forwardAmbient = new Shader("forward-ambient");          // added 2020-07-22
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // All pixels to black
 
     glFrontFace(GL_CW);
@@ -77,40 +78,10 @@ public class RenderingEngine extends MappedValues {
     glEnable(GL_DEPTH_CLAMP);
     glEnable(GL_TEXTURE_2D);
 
-//    mainCamera = new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f );
-//    ambientLight = new Vector3f(0.2f, 0.2f, 0.2f);
-//    activeDirectionalLight = new DirectionalLight(new BaseLight(new Vector3f(0, 0, 1), 0.4f), new Vector3f(1, 1, 1));
-//    directionalLight2 = new DirectionalLight(new BaseLight(new Vector3f(1, 0, 0), 0.4f), new Vector3f(-1, 1, -1));
-//    activePointLight = new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f), new Attenuation(0, 0, 1), new Vector3f(3, 0, 3), 100);
-
-//    int lightFieldWidth = 5;
-//    int lightFieldDepth = 5;
-//    
-//    float lightFieldStartX = 0;
-//    float lightFieldStartY = 0;
-//    float lightFieldStepX = 7;
-//    float lightFieldStepY = 7;
-//    
-//    pointLightList = new PointLight[lightFieldWidth * lightFieldDepth];
-//    
-//    for(int i = 0; i < lightFieldWidth; i++) {
-//      for(int j = 0; j < lightFieldDepth; j++) {
-//        pointLightList[i * lightFieldWidth + j] = new PointLight(new BaseLight(new Vector3f(0, 1, 0), 0.4f),
-//                                                                  new Attenuation(0, 0, 1),
-//                                                                  new Vector3f(lightFieldStartX + lightFieldStepX * i, 0, lightFieldStartY + lightFieldStepY * j), 100);
-//      }
-//    }
-//    
-//    activePointLight = pointLightList[0];
-//    
-//    spotLight = new SpotLight(new PointLight(new BaseLight(new Vector3f(0, 1, 1), 0.8f),
-//                              new Attenuation(0, 0, 0.01f), new Vector3f(lightFieldStartX, 0, lightFieldStartY), 100), new Vector3f(1, 0, 0), 0.7f);
+    ambientLight = new Vector3f(0.1f, 0.1f, 0.1f);
+    
   }
 
-//  public Vector3f getAmbientLight() {
-//
-//    return ambientLight;
-//  }
 
   public void render(GameObject object) {
 
@@ -119,9 +90,6 @@ public class RenderingEngine extends MappedValues {
 
     lights.clear();
     object.addToRenderingEngine(this);
-
-    Shader forwardAmbient = ForwardAmbient.getInstance();
-
     object.render(forwardAmbient, this);
 
     glEnable(GL_BLEND);

@@ -5,6 +5,7 @@
  */
 package com.base.engine.rendering.resourcemanagement;
 
+import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 
 /**
@@ -16,9 +17,8 @@ public class TextureResource {
     private int id;
     private int referenceCount;   // for counting meshes for deletion
   
-  public TextureResource(int id) {
-    
-    this.id = id;
+  public TextureResource() {
+    this.id = glGenTextures();
     this.referenceCount = 1;
   }
   

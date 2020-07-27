@@ -6,7 +6,7 @@
 package com.base.engine.components;
 
 import com.base.engine.core.Vector3f;
-import com.base.engine.rendering.ForwardPoint;
+import com.base.engine.rendering.Shader;
 
 /**
  *
@@ -31,7 +31,7 @@ public class PointLight extends BaseLight {
     
     this.range = (float) ( -attenuationB + Math.sqrt( attenuationB * attenuationB - 4 * attenuationA * attenuationC ) ) / ( 2 * attenuationA );
     
-    setShader(ForwardPoint.getInstance());
+    setShader(new Shader("forward-point"));
   }
 
   public float getRange() {
