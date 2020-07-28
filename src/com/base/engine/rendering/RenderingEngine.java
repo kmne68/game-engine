@@ -45,17 +45,14 @@ import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
  */
 public class RenderingEngine extends MappedValues {
 
-  private Camera mainCamera;
-  private Vector3f ambientLight;
+  
 
   private HashMap<String, Integer> samplerMap;
   private ArrayList<BaseLight> lights;
   private BaseLight activeLight;
 
-  private Shader forwardAmbient;          // added 2020-07-22
-
-//  private HashMap<String, Vector3f> vector3fHashMap;
-//  private HashMap<String, Float> floatHashMap;
+  private Shader forwardAmbient;
+  private Camera mainCamera;
 
   public RenderingEngine() {
 
@@ -77,9 +74,6 @@ public class RenderingEngine extends MappedValues {
 
     glEnable(GL_DEPTH_CLAMP);
     glEnable(GL_TEXTURE_2D);
-
-    ambientLight = new Vector3f(0.1f, 0.1f, 0.1f);
-    
   }
 
 
@@ -157,7 +151,11 @@ public class RenderingEngine extends MappedValues {
     mainCamera = camera;
   }
   
-  
+  /**
+   * This method is provided in case developers wish to handle structs that are 
+   * different than those supported by the Shader class
+   * 
+   * */
   public void updateUniformStruct(Transform transform, Material material, Shader shader, String uniformName, String uniformType) {
     
     throw new IllegalArgumentException(uniformType + "is not a supported type in RenderingEngine");

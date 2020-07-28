@@ -17,10 +17,10 @@ import static org.lwjgl.opengl.GL20.glCreateProgram;
 public class ShaderResource {
   
   private int program;
+  private int refCount;
   private HashMap<String, Integer> uniforms;
   private ArrayList<String> uniformNames;
   private ArrayList<String> uniformTypes;
-  private int refCount;
   
   public ShaderResource() {
     

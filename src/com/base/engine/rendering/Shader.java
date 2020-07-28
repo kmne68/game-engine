@@ -28,17 +28,11 @@ public class Shader {
   
   private ShaderResource resource;
   private String filename;
-  
-  private ArrayList<String> uniformNames;
-  private ArrayList<String> uniformTypes;
 
   public Shader(String fileName) {
 
-    uniformNames = new ArrayList<String>();
-    uniformTypes = new ArrayList<String>();
-
     this.filename = filename;
-    
+
     ShaderResource oldResource = loadedShaders.get(filename);
     
     if (oldResource != null) {
@@ -74,15 +68,15 @@ public class Shader {
 
     for (int i = 0; i < resource.getUniformNames().size(); i++) 
     {
-      String uniformName = uniformNames.get(i);
-      String uniformType = uniformTypes.get(i);
+      String uniformName = resource.getUniformNames().get(i);
+      String uniformType = resource.getUniformTypes().get(i);
       
       if (uniformType.equals("sampler2D"))
       {
-          int samplerSlot = renderingEngine.getSamplerSlot(uniformName);
-          material.getTexture(uniformName).bind(samplerSlot);
-          setUniformi(uniformName, samplerSlot);
-      } 
+        int samplerSlot = renderingEngine.getSamplerSlot(uniformName);
+        material.getTexture(uniformName).bind(samplerSlot);
+        setUniformi(uniformName, samplerSlot);
+      }
       else if(uniformName.startsWith("T_"))
       {
         if (uniformName.equals("T_MVP"))
@@ -154,14 +148,7 @@ public class Shader {
       int begin = attributeStartLocation + ATTRIBUTE_KEYWORD.length() + 1;
       int end = shaderText.indexOf(";", begin);
 
-//      if (!(attributeStartLocation != 0
-//              && (Character.isWhitespace(shaderText.charAt(attributeStartLocation - 1))
-//              || shaderText.charAt(attributeStartLocation - 1) == ';')
-//              && Character.isWhitespace(shaderText.charAt(attributeStartLocation + ATTRIBUTE_KEYWORD.length())))) {
-//        continue;
-//      }
-
-      String attributeLine = shaderText.substring(begin, end).trim();
+      String attributeLine = shaderText.substring(begin, end); //.trim();
       String attributeName = attributeLine.substring(attributeLine.indexOf(' ') + 1, attributeLine.length()); // .trim();
 
       setAttributeLocation(attributeName, attributeNumber);
@@ -191,13 +178,6 @@ public class Shader {
       int braceEnd = shaderText.indexOf("}", braceBegin);
       String structName = shaderText.substring(nameBegin, braceBegin).trim();
       ArrayList<GLSLStruct> glslStructs = new ArrayList<GLSLStruct>();
-
-//      if (!(structStartLocation != 0
-//              && (Character.isWhitespace(shaderText.charAt(structStartLocation - 1))
-//              || shaderText.charAt(structStartLocation - 1) == ';')
-//              && Character.isWhitespace(shaderText.charAt(structStartLocation + STRUCT_KEYWORD.length())))) {
-//        continue;
-//      }
 
       int componentSemicolonPosition = shaderText.indexOf(";", braceBegin);
       while (componentSemicolonPosition != -1 && componentSemicolonPosition < braceEnd) {
@@ -243,13 +223,6 @@ public class Shader {
 
     while (uniformStartLocation != -1) {
 
-//      if (!(uniformStartLocation != 0
-//              && (Character.isWhitespace(shaderText.charAt(uniformStartLocation - 1))
-//              || shaderText.charAt(uniformStartLocation - 1) == ';')
-//              && Character.isWhitespace(shaderText.charAt(uniformStartLocation + UNIFORM_KEYWORD.length())))) {
-//        continue;
-//      }
-
       int begin = uniformStartLocation + UNIFORM_KEYWORD.length() + 1;
       int end = shaderText.indexOf(";", begin);
 
@@ -260,8 +233,8 @@ public class Shader {
       String uniformName = uniformLine.substring(whitespacePosition + 1, uniformLine.length()); // .trim();
       String uniformType = uniformLine.substring(0, whitespacePosition); // .trim();
 
-      uniformNames.add(uniformName);
-      uniformTypes.add(uniformType);
+      resource.getUniformNames().add(uniformName);
+      resource.getUniformTypes().add(uniformType);
       addUniform(uniformName, uniformType, structs);
 
       uniformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD, uniformStartLocation + UNIFORM_KEYWORD.length());
