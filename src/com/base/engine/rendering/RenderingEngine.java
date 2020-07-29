@@ -82,8 +82,8 @@ public class RenderingEngine extends MappedValues {
     // clearScreen();    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    lights.clear();
-    object.addToRenderingEngine(this);
+//    lights.clear();
+//    object.addToRenderingEngine(this);
     object.render(forwardAmbient, this);
 
     glEnable(GL_BLEND);

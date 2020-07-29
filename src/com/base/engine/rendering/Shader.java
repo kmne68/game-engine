@@ -374,9 +374,9 @@ public class Shader {
   public void setUniformPointLight(String uniformName, PointLight pointLight) {
     
     setUniformBaseLight(uniformName + ".base", pointLight);
-    setUniformf(uniformName + ".attenuation.constant", pointLight.getConstant());
-    setUniformf(uniformName + ".attenuation.linear", pointLight.getLinear());
-    setUniformf(uniformName + ".attenuation.exponent", pointLight.getExponent());
+    setUniformf(uniformName + ".attenuation.constant", pointLight.getAttenuation().getConstant());
+    setUniformf(uniformName + ".attenuation.linear", pointLight.getAttenuation().getLinear());
+    setUniformf(uniformName + ".attenuation.exponent", pointLight.getAttenuation().getExponent());
     setUniform(uniformName + ".position", pointLight.getTransform().getTransformPosition());
     setUniformf(uniformName + ".range", pointLight.getRange());
   }

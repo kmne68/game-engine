@@ -17,6 +17,7 @@ import com.base.engine.rendering.Mesh;
 import com.base.engine.components.PointLight;
 import com.base.engine.components.SpotLight;
 import com.base.engine.core.Quaternion;
+import com.base.engine.rendering.Attenuation;
 import com.base.engine.rendering.Material;
 import com.base.engine.rendering.Vertex;
 import com.base.engine.rendering.Window;
@@ -78,7 +79,7 @@ public class TestGame extends Game {
     directionalLightObject.addComponent(directionalLight);
 
     GameObject pointLightObject = new GameObject();
-    pointLightObject.addComponent(new PointLight(new Vector3f(0, 1, 0), 0.4f, new Vector3f(0, 0, 1)));
+    pointLightObject.addComponent(new PointLight(new Vector3f(0, 1, 0), 0.4f, new Attenuation(0, 0, 1)));
     
     /**
      * 
@@ -93,7 +94,7 @@ public class TestGame extends Game {
      * 
      */
     SpotLight spotLight = new SpotLight(new Vector3f(0, 1, 1), 0.4f,
-            new Vector3f(0, 0, 0.1f), 0.7f);
+            new Attenuation(0, 0, 0.1f), 0.7f);
     
     GameObject spotLightObject = new GameObject();
     spotLightObject.addComponent(spotLight);

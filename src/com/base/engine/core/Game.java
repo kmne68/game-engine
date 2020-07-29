@@ -52,4 +52,10 @@ public abstract class Game {
     
   }
   
+  
+  public void setEngine(CoreEngine engine) {
+    
+    getRootObject().setEngine(engine);
+  }
+  
 }

@@ -6,6 +6,7 @@
 package com.base.engine.components;
 
 import com.base.engine.core.Vector3f;
+import com.base.engine.rendering.Attenuation;
 import com.base.engine.rendering.Shader;
 
 /**
@@ -16,7 +17,7 @@ public class SpotLight extends PointLight {
 
   private float cutoff;
 
-  public SpotLight(Vector3f color, float intensity, Vector3f attenuation, float cutoff) {
+  public SpotLight(Vector3f color, float intensity, Attenuation attenuation, float cutoff) {
     // attenuation comprises constant, linear and exponent properties
     
     super(color, intensity, attenuation);
