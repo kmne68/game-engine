@@ -51,6 +51,19 @@ public class Transform {
   }
   
   
+  public void lookAt(Vector3f point, Vector3f up) {
+    
+    rotation = getLookAtDirection(point, up);
+  
+  }
+  
+  
+  public Quaternion getLookAtDirection(Vector3f point, Vector3f up) {
+    
+    return new Quaternion(new Matrix4f().initializeRotation(point.subtract(position).normalize(), up));
+  }
+  
+  
   public void rotate(Vector3f axis, float angle) {
     
     rotation = new Quaternion(axis, angle).multiplyQuaternion(rotation).normalize();    

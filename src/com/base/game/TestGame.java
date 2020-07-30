@@ -21,6 +21,7 @@ import com.base.engine.rendering.Attenuation;
 import com.base.engine.rendering.Material;
 import com.base.engine.rendering.Vertex;
 import com.base.engine.rendering.Window;
+import com.base.game.LookAtComponent;
 
 /**
  *
@@ -116,7 +117,8 @@ public class TestGame extends Game {
     // Test Code from episode #46
     GameObject testMesh1 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
     GameObject testMesh2 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
-    GameObject testMesh3 = new GameObject().addComponent(new MeshRenderer(monkeyMesh, material));
+    // GameObject testMesh3 = new GameObject().addComponent(new MeshRenderer(monkeyMesh, material));
+    GameObject testMesh3 = new GameObject().addComponent(new LookAtComponent()).addComponent(new MeshRenderer(monkeyMesh, material));
     
     testMesh1.getTransform().getPosition().setVector3f(0, 2, 0);
     testMesh1.getTransform().setRotation( new Quaternion( new Vector3f( 0, 1, 0 ), 0.4f ) );

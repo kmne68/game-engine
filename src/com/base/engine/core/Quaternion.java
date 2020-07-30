@@ -58,6 +58,19 @@ public class Quaternion {
   }
   
   
+  public Quaternion add(Quaternion r) {
+    
+    return new Quaternion(x + r.getX(), y + r.getY(), z + r.getZ(), w + r.getW());
+    
+  }
+  
+  
+  public float dot(Quaternion r) {
+    
+    return x * r.getX() + y * r.getY() + z * r.getZ() + w * r.getW();
+  }
+  
+  
   public Quaternion multiplyFloat(Float r) {
     
     return new Quaternion(x * r, y * r, z * r, w * r);
@@ -81,6 +94,123 @@ public class Quaternion {
 
     return new Quaternion(x_, y_, z_, w_);
   }
+  
+  
+  /**
+   * Normalized Linear Interpolation (nlerp)
+   * 
+   * @param Quaternion
+   *        float
+   *        boolean
+   * 
+   * @return Quaternion
+   */
+  public Quaternion nlerp(Quaternion destination, float lerpFactor, boolean shortest) {
+    
+    Quaternion correctedDestination = destination;
+    
+    if(shortest && this.dot(destination) < 0) {
+      correctedDestination = new Quaternion(-destination.getX(), -destination.getY(), -destination.getZ(), -destination.getW());
+    }
+    
+    return correctedDestination.subtract(this).multiplyFloat(lerpFactor).add(this).normalize();
+    
+  }
+  
+  
+  /**
+   * Spherical Linear Interpolation (slerp)
+   * @param Quaternion
+   *        float
+   *        boolean
+   * @return Quaternion
+   */
+  public Quaternion slerp(Quaternion destination, float lerpFactor, boolean shortest) {
+    
+    final float EPSILON = 1e3f;
+    
+    float cos = this.dot(destination);
+    Quaternion correctedDestination = destination;
+    
+    if(shortest && cos < 0) {
+      
+      cos = -cos;
+      correctedDestination = new Quaternion(-destination.getX(), -destination.getY(), -destination.getZ(), -destination.getW());
+      
+    }
+    
+    if(Math.abs(cos) >= 1 - EPSILON)
+      return nlerp(correctedDestination, lerpFactor, false);
+    
+    float sin = (float)Math.sqrt(1.0f - cos * cos);
+    float angle = (float)Math.atan2(sin, cos);
+    float inverseSin = 1.0f / sin;
+    
+    float sourceFactor = (float)Math.sin((1.0f - lerpFactor) * angle ) * inverseSin;
+    float destinationFactor = (float)Math.sin((lerpFactor) * angle) * inverseSin;
+    
+    return this.multiplyFloat(sourceFactor).add(correctedDestination.multiplyFloat(destinationFactor));
+        
+  }
+  
+  
+  /**
+   * From Ken Shoemake's "Quaternion Calculus and Fast Animation" article
+   */
+  public Quaternion(Matrix4f rotation) {
+    
+    float trace = rotation.get(0, 0) + rotation.get(1, 1) + rotation.get(2, 2);
+  
+    if(trace > 0)
+    {
+      float s = 0.5f / (float)Math.sqrt(trace+ 1.0f);
+      w = 0.25f / s;
+      x = (rotation.get(1, 2) - rotation.get(2, 1)) * s;
+      y = (rotation.get(2, 0) - rotation.get(0, 2)) * s;
+      z = (rotation.get(0, 1) - rotation.get(1, 0)) * s;
+    }
+    else
+    {
+      if(rotation.get(0, 0) > rotation.get(1, 1) && rotation.get(0, 0) > rotation.get(2, 2))
+      {
+        float s = 2.0f * (float) Math.sqrt(1.0f + rotation.get(0, 0) - rotation.get(1, 1) - rotation.get(2, 2));
+        w = (rotation.get(1, 2) - rotation.get(2, 1)) / s;
+        x = 0.25f * s;
+        y = (rotation.get(1, 0) - rotation.get(0, 1)) / s;
+        z = (rotation.get(2, 0) - rotation.get(0, 2)) / s;
+      }
+      else if(rotation.get(1, 1) > rotation.get(2, 2))
+      {
+        float s = 2.0f * (float) Math.sqrt(1.0f + rotation.get(1, 1) - rotation.get(0, 0) - rotation.get(2, 2));
+        w = (rotation.get(2, 0) - rotation.get(0, 2)) / s;
+        x = (rotation.get(1, 0) + rotation.get(0, 1)) / s;
+        y = 0.25f * s;
+        z = (rotation.get(2, 1) - rotation.get(1, 2)) / s;        
+      }
+      else
+      {
+        float s = 2.0f * (float) Math.sqrt(1.0f + rotation.get(2, 2) - rotation.get(0, 0) - rotation.get(1, 1));
+        w = (rotation.get(0, 1) - rotation.get(1, 0)) / s;
+        x = (rotation.get(2, 0) + rotation.get(0, 2)) / s;
+        y = (rotation.get(1, 2) + rotation.get(2, 1)) / s;
+        z = 0.25f * s;
+      }
+    }
+    float length = (float)Math.sqrt(x * x + y * y + z * z + w * w);
+    x /= length;
+    y /= length;
+    z /= length;
+    w /= length;
+    
+  }
+  
+  
+  public Quaternion subtract(Quaternion r) {
+    
+    return new Quaternion(x - r.getX(), y - r.getY(), z - r.getZ(), w - r.getW());
+    
+  }
+  
 
   public Matrix4f toRotationMatrix() {
 
