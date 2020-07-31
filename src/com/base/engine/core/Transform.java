@@ -6,7 +6,6 @@
 package com.base.engine.core;
 
 import com.base.engine.components.Camera;
-import static com.base.engine.components.Camera.yAxis;
 
 /**
  *
