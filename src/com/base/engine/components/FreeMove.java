@@ -15,7 +15,30 @@ import com.base.engine.rendering.Window;
  *
  * @author kmne6
  */
-public class FreeMove extends GameComponent {  
+public class FreeMove extends GameComponent {
+  
+  private float speed;
+  private int forwardKey;
+  private int backwardKey;
+  private int leftKey;
+  private int rightKey;
+  
+  
+  public FreeMove(float speed) {
+    
+    this(speed, Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D);
+  }
+  
+  
+  public FreeMove(float speed, int forwardKey, int backwardKey, int leftKey, int rightKey) {
+    
+    this.speed = speed;
+    this.forwardKey = forwardKey;
+    this.backwardKey = backwardKey;
+    this.leftKey = leftKey;
+    this.rightKey = rightKey;
+  }
+  
   
   @Override
   public void input(float delta) {

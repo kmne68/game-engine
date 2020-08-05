@@ -124,7 +124,7 @@ public class TestGame extends Game {
     // This controls the monkey head (like a player)
     // GameObject testMesh3 = new GameObject().addComponent(new FreeLook()).addComponent(new MeshRenderer(monkeyMesh, material));
   
-    GameObject testMesh3 = new GameObject().addComponent(new FreeLook()).addComponent(new LookAtComponent()).addComponent(new MeshRenderer(monkeyMesh, material));
+    GameObject testMesh3 = new GameObject().addComponent(new LookAtComponent()).addComponent(new MeshRenderer(monkeyMesh, material));
     
     testMesh1.getTransform().getPosition().setVector3f(0, 2, 0);
     testMesh1.getTransform().setRotation( new Quaternion( new Vector3f( 0, 1, 0 ), 0.4f ) );
@@ -133,7 +133,7 @@ public class TestGame extends Game {
     testMesh2.getTransform().getPosition().setVector3f(0, 0, 5);
     
     testMesh1.addChild(testMesh2);
-     testMesh2.addChild(new GameObject().addComponent(new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f)));
+    testMesh2.addChild(new GameObject().addComponent(new FreeLook()).addComponent(new Camera((float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f)));
     // getRootObject().addChild(new GameObject().addComponent(new Camera( (float) Math.toRadians(70.0f), (float) Window.getWidth() / (float) Window.getHeight(), 0.01f, 1000.0f)));
     
 // testMesh2.addChild( new GameObject().addComponent(new FreeLook()).addComponent(new FreeMove()).addComponent(new Camera((float) Math.toRadians(70.0f),
