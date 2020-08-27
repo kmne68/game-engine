@@ -18,11 +18,31 @@ import com.base.engine.rendering.Window;
 public class FreeLook extends GameComponent {
 
   public static final Vector3f yAxis = new Vector3f(0, 1, 0);
+  
   boolean mouseLocked = false;
-  Vector2f centerPosition = new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2);
+  private float sensitivity;
+  private int unlockMouseKey;
+  
+  
+  // Camera may be inverted by passing a negative value for sensitivity
+  public FreeLook(float sensitivity) {
+    
+    this(sensitivity, Input.KEY_ESCAPE);
+  }
+  
+  
+  public FreeLook(float sensitivity, int unlockMouseKey) {
+    
+    this.sensitivity = sensitivity;
+    this.unlockMouseKey = unlockMouseKey;
+  }
+  
+  
 
   @Override
   public void input(float delta) {
+    
+    Vector2f centerPosition = new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2);
 
     float sensitivity = 0.5f;
     float moveAmount = (float) (10 * delta);
